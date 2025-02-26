@@ -1,30 +1,67 @@
-import { Button, IconButton } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import React from 'react';
 import { useData } from '../../contexts/DataContext';
+import LocationSpot from './LocationSpot';
+import LocationInfoDialog from './LocationInfoDialog';
 
 const ZOOM_STEP = 25;
+const ZOOM_MIN = 25;
+const ZOOM_MAX = 400;
 
 export default function Map({ src, focusLocation }) {
+  /** @type {React.MutableRefObject<HTMLDivElement>} */
+  const containerRef = React.useRef();
+
   const [zoom, setZoom] = React.useState(100);
   const scale = zoom / 100;
   const { locations } = useData();
+
+  const [selectedSpot, setSelectedSpot] = React.useState();
+
+  React.useEffect(() => {
+    if (focusLocation) {
+      const spot = locations.find((loc) => loc.id === focusLocation);
+      if (!spot) return;
+
+      const container = containerRef.current;
+
+      container.scrollTo(
+        spot.x * scale - container.clientWidth / 2,
+        spot.y * scale - container.clientHeight / 2
+      );
+    }
+  }, [focusLocation]);
   return (
     <>
-      <div>
+      {!!selectedSpot && (
+        <LocationInfoDialog
+          info={selectedSpot}
+          onClose={() => setSelectedSpot()}
+        />
+      )}
+      <ButtonGroup
+        variant="contained"
+        aria-label="Zoom control Buttons"
+        className="m-3"
+      >
         <Button
-          variant="contained"
-          onClick={() => setZoom((z) => z + ZOOM_STEP)}
-        >
-          +
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => setZoom((z) => z - ZOOM_STEP)}
+          disabled={zoom === ZOOM_MIN}
+          onClick={() => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP))}
         >
           -
         </Button>
-      </div>
-      <div className="w-full aspect-square max-w-[90dvh] overflow-auto">
+        <Button onClick={() => setZoom(100)}>{zoom}%</Button>
+        <Button
+          disabled={zoom === ZOOM_MAX}
+          onClick={() => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX))}
+        >
+          +
+        </Button>
+      </ButtonGroup>
+      <div
+        className="w-full aspect-square max-w-[90dvh] overflow-auto select-none"
+        ref={containerRef}
+      >
         <div style={{ zoom: scale }} className="w-fit h-fit relative">
           <img
             alt="地圖"
@@ -33,19 +70,11 @@ export default function Map({ src, focusLocation }) {
           />
 
           {locations.map((spot) => (
-            <div
+            <LocationSpot
               key={spot.id}
-              className="absolute w-[20px] h-[20px]"
-              style={{
-                left: spot.x + 'px',
-                top: spot.y + 'px',
-                borderRadius: 15,
-                background: 'blue',
-                color: 'white',
-              }}
-            >
-              {spot.id}
-            </div>
+              info={spot}
+              onClick={() => setSelectedSpot(spot)}
+            />
           ))}
         </div>
       </div>

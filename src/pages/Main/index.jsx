@@ -1,10 +1,14 @@
 import { useData } from './../../contexts/DataContext';
-import { CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, TextField, Typography } from '@mui/material';
 import image from './../../assets/test.jpg';
 import Map from './Map';
+import Filters from './Filters';
+import React from 'react';
 
 export default function Main() {
   const { loading } = useData();
+
+  const [selectedLocation, setSelectedLocation] = React.useState();
 
   if (loading) {
     return (
@@ -16,9 +20,13 @@ export default function Main() {
       </div>
     );
   }
+
   return (
     <main>
-      <Map src={image} />
+      <div className="w-[600px] max-w-full m-4">
+        <Filters onSelectLocation={setSelectedLocation} />
+      </div>
+      <Map src={image} focusLocation={selectedLocation} />
     </main>
   );
 }
