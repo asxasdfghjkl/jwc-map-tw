@@ -8,7 +8,7 @@ import React from 'react';
 export default function Main() {
   const { loading } = useData();
 
-  const [selectedLocation, setSelectedLocation] = React.useState();
+  const [selectedSpot, setSelectedSpot] = React.useState();
 
   if (loading) {
     return (
@@ -24,9 +24,9 @@ export default function Main() {
   return (
     <main>
       <div className="w-[600px] max-w-full m-4">
-        <Filters onSelectLocation={setSelectedLocation} />
+        <Filters onSelectSpot={setSelectedSpot} />
       </div>
-      <Map src={image} focusLocation={selectedLocation} />
+      <Map src={image} focusingSpot={selectedSpot} />
     </main>
   );
 }

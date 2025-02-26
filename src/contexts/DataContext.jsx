@@ -17,7 +17,7 @@ export function DataProvider({ children }) {
 
   const value = {
     loading,
-    get locations() {
+    get spots() {
       return data?.[0]?.data ?? [];
     },
     get assignments() {

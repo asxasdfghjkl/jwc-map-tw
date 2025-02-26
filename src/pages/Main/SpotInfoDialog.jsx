@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 
-export default function LocationInfoDialog({ info, onClose }) {
+export default function SpotInfoDialog({ info, onClose }) {
   return (
     <Dialog open onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>{info.name}</DialogTitle>

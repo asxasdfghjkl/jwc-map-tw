@@ -2,21 +2,21 @@ import { MenuItem, TextField } from '@mui/material';
 import React from 'react';
 import { useData } from '../../contexts/DataContext';
 
-export default function Filters({ onSelectLocation }) {
-  const { maps, locations } = useData();
+export default function Filters({ onSelectSpot }) {
+  const { maps, spots } = useData();
 
   const [assignee, setAssignee] = React.useState('');
   const [map, setMap] = React.useState('*');
   const [location, setLocation] = React.useState('');
 
-  const mapLocations = React.useMemo(() => {
-    if (map === '*') return locations;
-    return locations.filter((loc) => loc.map === map);
-  }, [map, locations]);
+  const spotOptions = React.useMemo(() => {
+    if (map === '*') return spots;
+    return spots.filter((loc) => loc.map === map);
+  }, [map, spots]);
 
   React.useEffect(() => {
-    onSelectLocation?.(location);
-  }, [location, onSelectLocation]);
+    onSelectSpot?.(location);
+  }, [location, onSelectSpot]);
 
   return (
     <form className="gap-4 flex">
@@ -41,7 +41,7 @@ export default function Filters({ onSelectLocation }) {
         value={location}
         onChange={(evt) => setLocation(evt.target.value)}
       >
-        {mapLocations.map((loc) => (
+        {spotOptions.map((loc) => (
           <MenuItem key={loc.name} value={loc.id}>
             {loc.name}
           </MenuItem>

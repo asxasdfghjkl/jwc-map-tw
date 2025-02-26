@@ -1,26 +1,26 @@
 import { Button, ButtonGroup } from '@mui/material';
 import React from 'react';
 import { useData } from '../../contexts/DataContext';
-import LocationSpot from './LocationSpot';
-import LocationInfoDialog from './LocationInfoDialog';
+import Spot from './Spot';
+import SpotInfoDialog from './SpotInfoDialog';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
 const ZOOM_MAX = 400;
 
-export default function Map({ src, focusLocation }) {
+export default function Map({ src, focusingSpot }) {
   /** @type {React.MutableRefObject<HTMLDivElement>} */
   const containerRef = React.useRef();
 
   const [zoom, setZoom] = React.useState(100);
   const scale = zoom / 100;
-  const { locations } = useData();
+  const { spots } = useData();
 
   const [selectedSpot, setSelectedSpot] = React.useState();
 
   React.useEffect(() => {
-    if (focusLocation) {
-      const spot = locations.find((loc) => loc.id === focusLocation);
+    if (focusingSpot) {
+      const spot = spots.find((loc) => loc.id === focusingSpot);
       if (!spot) return;
 
       const container = containerRef.current;
@@ -30,14 +30,11 @@ export default function Map({ src, focusLocation }) {
         spot.y * scale - container.clientHeight / 2
       );
     }
-  }, [focusLocation]);
+  }, [focusingSpot]);
   return (
     <>
       {!!selectedSpot && (
-        <LocationInfoDialog
-          info={selectedSpot}
-          onClose={() => setSelectedSpot()}
-        />
+        <SpotInfoDialog info={selectedSpot} onClose={() => setSelectedSpot()} />
       )}
       <ButtonGroup
         variant="contained"
@@ -69,8 +66,8 @@ export default function Map({ src, focusLocation }) {
             src={src}
           />
 
-          {locations.map((spot) => (
-            <LocationSpot
+          {spots.map((spot) => (
+            <Spot
               key={spot.id}
               info={spot}
               onClick={() => setSelectedSpot(spot)}
