@@ -41,9 +41,10 @@ export default function Filters({ onSelectSpot }) {
         value={location}
         onChange={(evt) => setLocation(evt.target.value)}
       >
+        <MenuItem value="">無</MenuItem>
         {spotOptions.map((loc) => (
           <MenuItem key={loc.name} value={loc.id}>
-            {loc.name}
+            {loc.id} {loc.name}
           </MenuItem>
         ))}
       </TextField>

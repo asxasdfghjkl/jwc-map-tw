@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply w-screen h-screen;
+  --spot-size: 25px;
+}
+
+.attendant-spot {
+  @apply absolute text-white bg-red-600 rounded-full flex justify-center items-center select-none cursor-pointer hover:bg-red-400 font-bold;
+  border: 1px solid white;
+  width: var(--spot-size);
+  height: var(--spot-size);
+  font-size: 12px;
+  margin-left: calc(var(--spot-size) / -2);
+  margin-top: calc(var(--spot-size) / -2);
+  z-index: 10;
+}

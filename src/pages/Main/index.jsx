@@ -1,9 +1,9 @@
-import { useData } from './../../contexts/DataContext';
-import { CircularProgress, TextField, Typography } from '@mui/material';
-import image from './../../assets/test.jpg';
-import Map from './Map';
-import Filters from './Filters';
+import { CircularProgress, Typography } from '@mui/material';
 import React from 'react';
+import image from './../../assets/test.jpg';
+import { useData } from './../../contexts/DataContext';
+import Filters from './Filters';
+import Map from './Map';
 
 export default function Main() {
   const { loading } = useData();
@@ -22,11 +22,13 @@ export default function Main() {
   }
 
   return (
-    <main>
-      <div className="w-[600px] max-w-full m-4">
+    <main className="flex flex-col lg:flex-row h-full w-full">
+      <div className="w-[400px] max-w-full p-4">
         <Filters onSelectSpot={setSelectedSpot} />
       </div>
-      <Map src={image} focusingSpot={selectedSpot} />
+      <div className="grow">
+        <Map src={image} focusingSpot={selectedSpot} />
+      </div>
     </main>
   );
 }
