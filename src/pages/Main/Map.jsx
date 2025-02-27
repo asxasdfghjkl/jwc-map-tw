@@ -1,30 +1,44 @@
-import { Button, ButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, MenuItem, TextField } from '@mui/material';
 import React from 'react';
 import { useData } from '@/contexts/DataContext';
 import { getQueryParam } from '@/utils/Query';
 import Spot from './Spot';
 import SpotInfoDialog from './SpotInfoDialog';
-import { usePersistFunction } from '@/utils/usePersistFunction';
 import { useNativeEvent } from '@/utils/useNativeEvent';
+import { useHash } from '@/utils/useHash';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
 const ZOOM_MAX = 400;
 
-export default function Map({ src, focusingSpot }) {
+export default function Map() {
   /** @type {React.MutableRefObject<HTMLDivElement>} */
   const containerRef = React.useRef();
 
   const [zoom, setZoom] = React.useState(100);
   const scale = zoom / 100;
-  const { spots } = useData();
 
-  const [selectedSpot, setSelectedSpot] = React.useState();
-
-  const highlightedSpot = React.useMemo(
-    () => spots.find((s) => s.id === focusingSpot),
-    [focusingSpot, spots]
+  const { spots, maps } = useData();
+  const [selectedMapName, setSelectedMapName] = React.useState(maps[0].name);
+  const selectedMap = React.useMemo(
+    () => maps.find((m) => m.name === selectedMapName),
+    [selectedMapName, maps]
   );
+  const spotsInSelectedMap = React.useMemo(
+    () => spots.filter((s) => s.map === selectedMapName),
+    [spots, selectedMapName]
+  );
+
+  const highlightedSpotName = useHash();
+  const highlightedSpot = React.useMemo(
+    () => spots.find((s) => s.id === highlightedSpotName),
+    [highlightedSpotName, spots]
+  );
+  React.useEffect(() => {
+    if (highlightedSpot) {
+      setSelectedMapName(highlightedSpot.map);
+    }
+  }, [highlightedSpot]);
 
   React.useEffect(() => {
     if (highlightedSpot) {
@@ -32,14 +46,12 @@ export default function Map({ src, focusingSpot }) {
       container.scrollTo({
         left: highlightedSpot.x * scale - container.clientWidth / 2,
         top: highlightedSpot.y * scale - container.clientHeight / 2,
-        behavior: 'auto',
       });
     }
   }, [highlightedSpot, scale]);
 
   const { xy } = getQueryParam();
-
-  const onMapDoubleClick = usePersistFunction((evt) => {
+  useNativeEvent(containerRef.current, 'dblclick', (evt) => {
     if (xy) {
       alert(
         `x: ${Math.floor(evt.offsetX / scale)}, y: ${Math.floor(
@@ -48,19 +60,32 @@ export default function Map({ src, focusingSpot }) {
       );
     }
   });
-  useNativeEvent(containerRef.current, 'dblclick', onMapDoubleClick);
+
+  const [showSpotInfo, setShowSpotInfo] = React.useState();
 
   return (
     <div className="w-full h-full flex flex-col border-black border-2 relative">
-      {!!selectedSpot && (
-        <SpotInfoDialog info={selectedSpot} onClose={() => setSelectedSpot()} />
+      {!!showSpotInfo && (
+        <SpotInfoDialog info={showSpotInfo} onClose={() => setShowSpotInfo()} />
       )}
-      <div>
-        <ButtonGroup
-          variant="contained"
-          aria-label="Zoom control Buttons"
-          className="absolute m-3 left-0 top-0 z-[100] opacity-80"
+      <div className="absolute m-3 left-0 top-0 z-[100] opacity-90 ">
+        <TextField
+          value={selectedMapName}
+          select
+          onChange={(evt) => {
+            window.location.hash = '';
+            setSelectedMapName(evt.target.value);
+          }}
+          className="mr-3 bg-white"
+          size="small"
         >
+          {maps.map((m) => (
+            <MenuItem key={m.name} value={m.name}>
+              {m.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        <ButtonGroup variant="contained" aria-label="Zoom control Buttons">
           <Button
             disabled={zoom === ZOOM_MIN}
             onClick={() => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP))}
@@ -84,14 +109,14 @@ export default function Map({ src, focusingSpot }) {
           <img
             alt="地圖"
             className="max-h-none max-w-none absolute left-0 right-0"
-            src={src}
+            src={selectedMap.file}
           />
 
-          {spots.map((spot) => (
+          {spotsInSelectedMap.map((spot) => (
             <Spot
               key={spot.id}
               info={spot}
-              onClick={() => setSelectedSpot(spot)}
+              onClick={() => setShowSpotInfo(spot)}
             />
           ))}
           {!!highlightedSpot && (

@@ -1,14 +1,10 @@
 import { CircularProgress, Typography } from '@mui/material';
-import React from 'react';
-import image from './../../assets/test.jpg';
 import { useData } from './../../contexts/DataContext';
-import Filters from './Filters';
+import { Filters } from './Filters';
 import Map from './Map';
 
 export default function Main() {
   const { loading } = useData();
-
-  const [selectedSpot, setSelectedSpot] = React.useState();
 
   if (loading) {
     return (
@@ -22,12 +18,12 @@ export default function Main() {
   }
 
   return (
-    <main className="flex flex-col lg:flex-row h-full w-full">
-      <div className="w-[400px] max-w-full p-4">
-        <Filters onSelectSpot={setSelectedSpot} />
+    <main className="flex flex-col big:flex-row h-full w-full">
+      <div className="w-[400px] max-w-full p-3">
+        <Filters />
       </div>
       <div className="grow">
-        <Map src={image} focusingSpot={selectedSpot} />
+        <Map />
       </div>
     </main>
   );

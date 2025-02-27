@@ -14,24 +14,25 @@ export function DataProvider({ children }) {
       { id: '地圖' },
     ],
   });
+  const parsedData = React.useMemo(() => {
+    return {
+      loading,
+      get spots() {
+        return data?.[0]?.data ?? [];
+      },
+      get shifts() {
+        return data?.[1]?.data ?? [];
+      },
+      get brothers() {
+        return data?.[2]?.data ?? [];
+      },
+      get maps() {
+        return data?.[3]?.data ?? [];
+      },
+    };
+  }, [data, loading]);
 
-  const value = {
-    loading,
-    get spots() {
-      return data?.[0]?.data ?? [];
-    },
-    get assignments() {
-      return data?.[2]?.data ?? [];
-    },
-    get brothers() {
-      return data?.[1]?.data ?? [];
-    },
-    get maps() {
-      return data?.[3]?.data ?? [];
-    },
-  };
-
-  return <context.Provider value={value}>{children}</context.Provider>;
+  return <context.Provider value={parsedData}>{children}</context.Provider>;
 }
 
 export function useData() {
