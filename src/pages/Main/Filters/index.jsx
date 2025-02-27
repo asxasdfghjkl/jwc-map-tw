@@ -1,13 +1,13 @@
 import { TabView } from '@/components/TabView';
 import BrotherFilter from './Brother';
-import MapFilter from './Map';
+import SpotFilter from './Spot';
 
 export function Filters() {
   return (
     <TabView
       tabs={[
         { name: 'brother', label: '弟兄', render: <BrotherFilter /> },
-        { name: 'map', label: '會場', render: <MapFilter /> },
+        { name: 'map', label: '地點', render: <SpotFilter /> },
       ]}
     />
   );
