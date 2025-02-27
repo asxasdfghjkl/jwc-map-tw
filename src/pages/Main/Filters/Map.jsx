@@ -3,7 +3,7 @@ import { MenuItem, TextField } from '@mui/material';
 import React from 'react';
 
 export default function MapFilter() {
-  const { maps, spots } = useData();
+  const { maps } = useData();
 
   const [selectedMap, setSelectedMap] = React.useState();
 

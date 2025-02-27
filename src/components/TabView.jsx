@@ -1,4 +1,4 @@
-import { AppBar, Paper, Tab, Tabs, Toolbar } from '@mui/material';
+import { AppBar, Paper, Tab, Tabs } from '@mui/material';
 import React from 'react';
 
 export function TabView({ tabs }) {
