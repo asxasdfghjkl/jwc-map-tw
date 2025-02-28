@@ -1,4 +1,5 @@
 import { useData } from '@/contexts/DataContext';
+import { useQueryParam } from '@/utils/useQueryParam';
 import {
   Autocomplete,
   List,
@@ -12,7 +13,10 @@ import React from 'react';
 
 export default function BrotherFilter() {
   const { brothers, shifts } = useData();
-  const [selectedBrother, setSelectedBrother] = React.useState(null);
+  const { b } = useQueryParam();
+  const [selectedBrother, setSelectedBrother] = React.useState(
+    brothers.find((bro) => bro.name === b) ?? null
+  );
 
   const filteredShifts = React.useMemo(() => {
     if (!selectedBrother) return [];
