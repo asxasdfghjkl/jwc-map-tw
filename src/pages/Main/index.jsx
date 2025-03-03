@@ -1,16 +1,22 @@
 import { LoadingView } from '@/components/LoadingView';
-import { useDisplayMode } from '@/contexts/DisplayModeContext';
-import { useHash } from '@/utils/useHash';
-import { Close as CloseIcon } from '@mui/icons-material';
-import { AppBar, Dialog, IconButton, Toolbar } from '@mui/material';
+import { Search as SearchIcon, Close as CloseIcon } from '@mui/icons-material';
+import { AppBar, Dialog, Fab, IconButton, Toolbar } from '@mui/material';
 import { useData } from './../../contexts/DataContext';
-import { Filters } from './Filters';
 import { Map } from './Map';
+import React from 'react';
+import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import { Filters } from '@/pages/Main/Filters';
+import { useHash } from '@/utils/useHash';
 
 export default function Main() {
   const { loading } = useData();
-  const hash = useHash();
   const { isMobile } = useDisplayMode();
+  const hash = useHash();
+  const [showFilter, setShowFilter] = React.useState(false);
+
+  React.useEffect(() => {
+    setShowFilter(false);
+  }, [hash]);
 
   if (loading) {
     return (
@@ -20,37 +26,31 @@ export default function Main() {
     );
   }
 
-  if (isMobile) {
-    return (
-      <>
-        <Filters />
-        {!!hash && (
-          <Dialog open fullScreen>
-            <AppBar position="sticky">
-              <Toolbar className="justify-end">
-                <IconButton
-                  color="inherit"
-                  onClick={() => (window.location.hash = '')}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Toolbar>
-            </AppBar>
-            <Map />
-          </Dialog>
-        )}
-      </>
-    );
-  }
-
   return (
     <main className="flex flex-row h-full w-full">
-      <div className="w-[400px] max-w-full p-3">
+      <Map />
+      <Dialog
+        open={showFilter}
+        fullScreen={isMobile}
+        fullWidth
+        maxWidth="sm"
+        keepMounted
+      >
+        <AppBar position="sticky" color="default">
+          <Toolbar className="justify-end">
+            <IconButton onClick={() => setShowFilter(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
         <Filters />
-      </div>
-      <div className="grow">
-        <Map />
-      </div>
+      </Dialog>
+      <Fab
+        onClick={() => setShowFilter(true)}
+        className="fixed bottom-4 right-4"
+      >
+        <SearchIcon />
+      </Fab>
     </main>
   );
 }
