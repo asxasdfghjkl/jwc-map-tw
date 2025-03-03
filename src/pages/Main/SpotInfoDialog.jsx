@@ -8,7 +8,9 @@ import {
 export default function SpotInfoDialog({ info, onClose }) {
   return (
     <Dialog open onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle>{info.name}</DialogTitle>
+      <DialogTitle>
+        {info.id} {info.name}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText className="whitespace-pre-line">
           {info.description}
