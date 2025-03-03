@@ -6,6 +6,7 @@ import Spot from './Spot';
 import SpotInfoDialog from './SpotInfoDialog';
 import { useNativeEvent } from '@/utils/useNativeEvent';
 import { useHash } from '@/utils/useHash';
+import { LoadingView } from '@/components/LoadingView';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
@@ -106,12 +107,16 @@ export default function Map() {
         className="w-full h-full overflow-auto select-none"
         ref={containerRef}
       >
+        {loadedMap !== selectedMap.file && (
+          <LoadingView className={'absolute'} />
+        )}
         <div style={{ zoom: scale }} className="w-fit h-fit relative">
           <img
             alt="地圖"
+            key={selectedMap.file}
             className="max-h-none max-w-none absolute left-0 right-0"
             src={selectedMap.file}
-            onLoad={(evt) => setLoadedMap(evt.currentTarget.src)}
+            onLoad={(evt) => setLoadedMap(selectedMap.file)}
           />
 
           {spotsInSelectedMap.map((spot) => (

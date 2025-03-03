@@ -1,4 +1,4 @@
-import { CircularProgress, Typography } from '@mui/material';
+import { LoadingView } from '@/components/LoadingView';
 import { useData } from './../../contexts/DataContext';
 import { Filters } from './Filters';
 import Map from './Map';
@@ -8,11 +8,8 @@ export default function Main() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <CircularProgress />
-        <Typography variant="h4" className="pl-3">
-          載入中
-        </Typography>
+      <div className="w-screen h-screen">
+        <LoadingView />
       </div>
     );
   }
