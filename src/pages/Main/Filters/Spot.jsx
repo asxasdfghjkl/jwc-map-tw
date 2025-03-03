@@ -7,6 +7,7 @@ import {
   ListItemText,
   MenuItem,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableHead,
@@ -19,7 +20,7 @@ import React from 'react';
 export default function MapFilter() {
   const { maps, spots, shifts } = useData();
 
-  const [selectedMapName, setSelectedMapName] = React.useState();
+  const [selectedMapName, setSelectedMapName] = React.useState('');
 
   const spotsInSelectedMap = React.useMemo(() => {
     if (!selectedMapName) return spots;
@@ -110,13 +111,15 @@ export default function MapFilter() {
                   <TableCell>下午</TableCell>
                 </TableRow>
               </TableHead>
-              {shiftsOfSelectedSpot.map((shift) => (
-                <TableRow key={shift.date + shift.spot}>
-                  <TableCell>{shift.date}</TableCell>
-                  <TableCell>{shift.am}</TableCell>
-                  <TableCell>{shift.pm}</TableCell>
-                </TableRow>
-              ))}
+              <TableBody>
+                {shiftsOfSelectedSpot.map((shift) => (
+                  <TableRow key={shift.date + shift.spot}>
+                    <TableCell>{shift.date}</TableCell>
+                    <TableCell>{shift.am}</TableCell>
+                    <TableCell>{shift.pm}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </TableContainer>
         </>
