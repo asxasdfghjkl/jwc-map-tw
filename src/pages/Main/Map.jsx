@@ -7,12 +7,13 @@ import SpotInfoDialog from './SpotInfoDialog';
 import { useNativeEvent } from '@/utils/useNativeEvent';
 import { useHash } from '@/utils/useHash';
 import { LoadingView } from '@/components/LoadingView';
+import { useDisplayMode } from '@/contexts/DisplayModeContext';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
 const ZOOM_MAX = 400;
 
-export default function Map() {
+export function Map() {
   /** @type {React.MutableRefObject<HTMLDivElement>} */
   const containerRef = React.useRef();
 
@@ -65,6 +66,8 @@ export default function Map() {
   const [showSpotInfo, setShowSpotInfo] = React.useState();
 
   const [loadedMap, setLoadedMap] = React.useState('');
+
+  const { isMobile } = useDisplayMode();
   return (
     <div className="w-full h-full flex flex-col border-black border-2 relative">
       {!!showSpotInfo && (
@@ -74,6 +77,7 @@ export default function Map() {
         <TextField
           value={selectedMapName}
           select
+          disabled={isMobile}
           onChange={(evt) => {
             window.location.hash = '';
             setSelectedMapName(evt.target.value);
@@ -114,7 +118,7 @@ export default function Map() {
           <img
             alt="地圖"
             key={selectedMap.file}
-            className="max-h-none max-w-none absolute left-0 right-0"
+            className="max-h-none max-w-none absolute left-0 top-0"
             src={selectedMap.file}
             onLoad={(evt) => setLoadedMap(selectedMap.file)}
           />
