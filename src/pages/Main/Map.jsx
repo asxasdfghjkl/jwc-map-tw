@@ -63,6 +63,7 @@ export default function Map() {
 
   const [showSpotInfo, setShowSpotInfo] = React.useState();
 
+  const [loadedMap, setLoadedMap] = React.useState('');
   return (
     <div className="w-full h-full flex flex-col border-black border-2 relative">
       {!!showSpotInfo && (
@@ -110,6 +111,7 @@ export default function Map() {
             alt="地圖"
             className="max-h-none max-w-none absolute left-0 right-0"
             src={selectedMap.file}
+            onLoad={(evt) => setLoadedMap(evt.currentTarget.src)}
           />
 
           {spotsInSelectedMap.map((spot) => (
