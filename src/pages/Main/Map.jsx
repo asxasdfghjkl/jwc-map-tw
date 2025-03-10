@@ -1,20 +1,21 @@
+import { LoadingView } from '@/components/LoadingView';
+import { useData } from '@/contexts/DataContext';
+import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import { useHash } from '@/utils/useHash';
+import { useNativeEvent } from '@/utils/useNativeEvent';
+import { useQueryParam } from '@/utils/useQueryParam';
 import { Button, ButtonGroup, Chip, MenuItem, TextField } from '@mui/material';
 import React from 'react';
-import { useData } from '@/contexts/DataContext';
-import { getQueryParam } from '@/utils/Query';
 import Spot from './Spot';
 import SpotInfoDialog from './SpotInfoDialog';
-import { useNativeEvent } from '@/utils/useNativeEvent';
-import { useHash } from '@/utils/useHash';
-import { LoadingView } from '@/components/LoadingView';
-import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import { updateQuery } from '@/utils/Query';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
 const ZOOM_MAX = 400;
 
 export function Map() {
-  /** @type {React.MutableRefObject<HTMLDivElement>} */
+  /** @type {React.RefObject<HTMLDivElement>} */
   const containerRef = React.useRef();
 
   const [zoom, setZoom] = React.useState(100);
@@ -52,7 +53,9 @@ export function Map() {
     }
   }, [highlightedSpot, scale]);
 
-  const { xy } = getQueryParam();
+  const { xy, open } = useQueryParam();
+  console.log('open', open);
+
   useNativeEvent(containerRef.current, 'dblclick', (evt) => {
     if (xy) {
       alert(
@@ -63,8 +66,6 @@ export function Map() {
     }
   });
 
-  const [showSpotInfo, setShowSpotInfo] = React.useState();
-
   const [loadedMap, setLoadedMap] = React.useState('');
 
   const { isMobile } = useDisplayMode();
@@ -74,8 +75,11 @@ export function Map() {
   };
   return (
     <div className="w-full h-full flex flex-col border-black border-2 relative">
-      {!!showSpotInfo && (
-        <SpotInfoDialog info={showSpotInfo} onClose={() => setShowSpotInfo()} />
+      {open === 'spot' && (
+        <SpotInfoDialog
+          info={highlightedSpot}
+          onClose={() => updateQuery('open', null)}
+        />
       )}
       <div
         className="w-full h-full overflow-auto select-none"
@@ -97,7 +101,9 @@ export function Map() {
             <Spot
               key={spot.id}
               info={spot}
-              onClick={() => setShowSpotInfo(spot)}
+              onClick={() => {
+                updateQuery('open', 'spot', spot.id);
+              }}
             />
           ))}
           {!!highlightedSpot && (
@@ -154,8 +160,9 @@ export function Map() {
                 key={m.name}
                 label={m.name}
                 data-map={m.name}
+                className="select-none"
                 color={m.name === selectedMapName ? 'primary' : 'default'}
-                onClick={onChipClick}
+                onClick={m.name === selectedMapName ? undefined : onChipClick}
               />
             ))}
           </div>

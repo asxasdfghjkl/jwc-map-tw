@@ -1,10 +1,10 @@
-import { getQueryParam } from "@/utils/Query";
 import { useNativeEvent } from "@/utils/useNativeEvent";
 import React from "react";
+import qs from 'qs';
 
 export function useQueryParam() {
     const [, refresh] = React.useState();
+    useNativeEvent(window, 'querychange', () => refresh(new Date()))
 
-    useNativeEvent(window, 'navigate', () => refresh(new Date()));
-    return getQueryParam();
+    return qs.parse(location.search.substring(1));
 }
