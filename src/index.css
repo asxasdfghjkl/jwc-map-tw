@@ -1,4 +1,9 @@
-@import 'tailwindcss';
+@import 'tailwindcss' important;
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-desktop: 55rem;
+}
 
 body {
   @apply w-screen h-screen;

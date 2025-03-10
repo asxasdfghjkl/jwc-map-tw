@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, MenuItem, TextField } from '@mui/material';
+import { Button, ButtonGroup, Chip, MenuItem, TextField } from '@mui/material';
 import React from 'react';
 import { useData } from '@/contexts/DataContext';
 import { getQueryParam } from '@/utils/Query';
@@ -68,45 +68,15 @@ export function Map() {
   const [loadedMap, setLoadedMap] = React.useState('');
 
   const { isMobile } = useDisplayMode();
+
+  const onChipClick = (evt) => {
+    setSelectedMapName(evt.currentTarget.dataset.map);
+  };
   return (
     <div className="w-full h-full flex flex-col border-black border-2 relative">
       {!!showSpotInfo && (
         <SpotInfoDialog info={showSpotInfo} onClose={() => setShowSpotInfo()} />
       )}
-      <div className="absolute m-3 left-0 top-0 z-[100] opacity-90 ">
-        <TextField
-          value={selectedMapName}
-          select
-          disabled={isMobile}
-          onChange={(evt) => {
-            window.location.hash = '';
-            setSelectedMapName(evt.target.value);
-          }}
-          className="mr-3 bg-white"
-          size="small"
-        >
-          {maps.map((m) => (
-            <MenuItem key={m.name} value={m.name}>
-              {m.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        <ButtonGroup variant="contained" aria-label="Zoom control Buttons">
-          <Button
-            disabled={zoom === ZOOM_MIN}
-            onClick={() => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP))}
-          >
-            -
-          </Button>
-          <Button onClick={() => setZoom(100)}>{zoom}%</Button>
-          <Button
-            disabled={zoom === ZOOM_MAX}
-            onClick={() => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX))}
-          >
-            +
-          </Button>
-        </ButtonGroup>
-      </div>
       <div
         className="w-full h-full overflow-auto select-none"
         ref={containerRef}
@@ -137,6 +107,59 @@ export function Map() {
             />
           )}
         </div>
+      </div>
+      <div className="absolute flex items-center p-4 z-[1000] opacity-90 bottom-0 right-0 desktop:top-0 desktop:left-[320px] desktop:bottom-auto desktop:right-auto gap-3">
+        {isMobile && (
+          <TextField
+            value={selectedMapName}
+            select
+            onChange={(evt) => {
+              window.location.hash = '';
+              setSelectedMapName(evt.target.value);
+            }}
+            className="bg-white"
+            size="small"
+          >
+            {maps.map((m) => (
+              <MenuItem key={m.name} value={m.name}>
+                {m.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
+
+        <ButtonGroup
+          variant="contained"
+          aria-label="Zoom control Buttons"
+          className="h-full"
+        >
+          <Button
+            disabled={zoom === ZOOM_MIN}
+            onClick={() => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP))}
+          >
+            -
+          </Button>
+          <Button onClick={() => setZoom(100)}>{zoom}%</Button>
+          <Button
+            disabled={zoom === ZOOM_MAX}
+            onClick={() => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX))}
+          >
+            +
+          </Button>
+        </ButtonGroup>
+        {!isMobile && (
+          <div className="flex gap-2">
+            {maps.map((m) => (
+              <Chip
+                key={m.name}
+                label={m.name}
+                data-map={m.name}
+                color={m.name === selectedMapName ? 'primary' : 'default'}
+                onClick={onChipClick}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

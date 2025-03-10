@@ -7,11 +7,15 @@ export function useDisplayMode() {
   return React.useContext(DisplayModeContext);
 }
 
+const DESKTOP_SIZE = 55 * 16;
+
 export function DisplayModeContextProvider({ children }) {
-  const [isMobile, setIsMobile] = React.useState(window.innerWidth < 800);
+  const [isMobile, setIsMobile] = React.useState(
+    window.innerWidth < DESKTOP_SIZE
+  );
 
   useNativeEvent(window, 'resize', () => {
-    setIsMobile(window.innerWidth < 800);
+    setIsMobile(window.innerWidth < DESKTOP_SIZE);
   });
 
   return (

@@ -5,7 +5,6 @@ export default {
   theme: {
     extend: {},
     screens: {
-      big: '1024px',
     }
   },
   plugins: [],

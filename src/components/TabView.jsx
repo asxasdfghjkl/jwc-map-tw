@@ -1,13 +1,24 @@
 import { AppBar, Paper, Tab, Tabs } from '@mui/material';
 import React from 'react';
 
-export function TabView({ tabs }) {
+/** @typedef {object} TabConfig
+ *  @property {string} name
+ *  @property {string} label
+ *  @property {React.ReactNode} render
+ */
+
+/**
+ *
+ * @param {{tabs: TabConfig[], headerElevation: number}} props
+ * @returns
+ */
+export function TabView({ tabs, headerElevation = 3 }) {
   const [selectedTab, setSelectedTab] = React.useState(tabs[0].name);
   const [inited] = React.useState({ [tabs[0].name]: true });
 
   return (
-    <Paper className="flex flex-col" elevation={3}>
-      <AppBar position="static" color="inherit">
+    <Paper className="flex flex-col">
+      <AppBar position="static" color="inherit" elevation={headerElevation}>
         <Tabs
           variant="fullWidth"
           value={selectedTab}

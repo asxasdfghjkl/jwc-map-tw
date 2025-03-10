@@ -20,6 +20,7 @@ import { useData } from './../../contexts/DataContext';
 import { Map } from './Map';
 import { NavigateBefore, Person, PinDrop, Search } from '@mui/icons-material';
 import { BottomSheet } from '@/components/BottomSheet';
+import { SearchBar } from '@/pages/Main/SearchBar';
 
 export default function Main() {
   const { loading, brothers, spots } = useData();
@@ -67,52 +68,39 @@ export default function Main() {
 
   return (
     <main className="flex flex-row h-full w-full">
-      <Paper
-        className="fixed top-4 w-[300px] left-[50%] -ml-[150px] z-[1000]"
-        elevation={3}
-      >
-        <TextField
-          fullWidth
-          placeholder="請輸入姓名或是位置編號"
-          value={filterInput}
-          onFocus={(evt) => {
-            evt.target.blur();
-            setShowFilter(true);
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <IconButton disabled>
-                  <Search />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Paper>
+      <SearchBar
+        value={filterInput}
+        onFocus={(evt) => {
+          evt.target.blur();
+          setShowFilter(true);
+        }}
+      />
       {showFilter && (
         <Dialog open fullScreen={isMobile}>
-          <DialogContent className="flex justify-center p-3 h-full">
+          <DialogContent className="flex justify-center p-4 h-full">
             <div className="flex flex-col w-[300px]">
               <TextField
                 fullWidth
+                size="small"
                 placeholder="請輸入姓名或是位置編號"
                 value={filterInput}
                 onChange={(evt) => setFilterInput(evt.target.value)}
                 onFocus={() => setShowFilter(true)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton
-                        onClick={() => {
-                          setShowFilter(false);
-                          window.document.body.focus();
-                        }}
-                      >
-                        <NavigateBefore />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton
+                          onClick={() => {
+                            setShowFilter(false);
+                            window.document.body.focus();
+                          }}
+                        >
+                          <NavigateBefore />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
                 }}
               />
               <List>
@@ -145,7 +133,7 @@ export default function Main() {
         </Dialog>
       )}
       <Map />
-      <BottomSheet summary={<h1>hello</h1>} />
+      {/* <BottomSheet summary={<h1>hello</h1>} /> */}
     </main>
   );
 }
