@@ -1,3 +1,5 @@
+import { addSearchHistory, getSearchHistory } from '@/helpers/SearchHistory';
+import { updateUrl } from '@/utils/Url';
 import { History as HistoryIcon } from '@mui/icons-material';
 import {
   ListItemButton,
@@ -6,14 +8,14 @@ import {
   ListSubheader,
 } from '@mui/material';
 
-export function SearchHistory({ onSelectHistory }) {
-  const history = JSON.parse(localStorage.history ?? '[]');
-  if (!Array.isArray(history)) {
-    localStorage.history = '[]';
-    history = [];
-  }
+export function SearchHistory({}) {
+  const history = getSearchHistory();
 
-  const onItemClick = (evt) => onSelectHistory(evt.currentTarget.dataset.item);
+  const onItemClick = (evt) => {
+    const { item: text } = evt.currentTarget.dataset;
+    addSearchHistory(text);
+    updateUrl({ f: text });
+  };
 
   return (
     <>

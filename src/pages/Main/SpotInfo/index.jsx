@@ -1,5 +1,7 @@
 import { TabView } from '@/components/TabView';
 import { useData } from '@/contexts/DataContext';
+import { updateUrl } from '@/utils/Url';
+import { useQueryParam } from '@/utils/useQueryParam';
 import {
   Dialog,
   DialogContentText,
@@ -12,24 +14,39 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-/**
- *
- * @param {{info :import('@/contexts/DataContext').SpotData , onClose: () => void}} props
- * @returns {import('react').JSX}
- */
-export default function SpotInfoDialog({ info, onClose }) {
-  const { shifts } = useData();
+export default function SpotInfoDialog() {
+  const { shifts, spots } = useData();
+  const { s } = useQueryParam();
+
+  const spot = React.useMemo(() => {
+    if (!s) return null;
+
+    return spots.find((sp) => sp.id === s);
+  }, [s, spots]);
 
   const spotShifts = React.useMemo(() => {
+    if (!spot) return [];
+
     return [5, 6, 7].map((day) => {
-      return shifts.find((s) => s.date == day && s.spot === info.id);
+      return shifts.find(
+        (shift) => shift.date == day && shift.spot === spot.id
+      );
     });
-  }, [shifts, info.id]);
+  }, [shifts, spot]);
+
+  if (!spot) return null;
 
   return (
-    <Dialog open onClose={onClose} maxWidth="xs" fullWidth>
+    <Dialog
+      open
+      onClose={() => {
+        updateUrl({ s: null }, true);
+      }}
+      maxWidth="xs"
+      fullWidth
+    >
       <DialogTitle>
-        {info.id} {info.name}
+        {spot.id} {spot.name}
       </DialogTitle>
       <TabView
         headerElevation={0}
@@ -39,7 +56,7 @@ export default function SpotInfoDialog({ info, onClose }) {
             label: '指引',
             render: (
               <DialogContentText className="whitespace-pre-line">
-                {info.description}
+                {spot.description}
               </DialogContentText>
             ),
           },

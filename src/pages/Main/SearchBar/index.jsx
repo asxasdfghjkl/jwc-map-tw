@@ -1,9 +1,11 @@
 import { useData } from '@/contexts/DataContext';
 import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import { addSearchHistory } from '@/helpers/SearchHistory';
 import { SearchHistory } from '@/pages/Main/SearchBar/SearchHistory';
 import { SearchResultItem } from '@/pages/Main/SearchBar/SearchResultItem';
-import { updateQuery } from '@/utils/Query';
-import { NavigateBefore, Search } from '@mui/icons-material';
+import { updateUrl } from '@/utils/Url';
+import { useQueryParam } from '@/utils/useQueryParam';
+import { Clear, NavigateBefore, Search } from '@mui/icons-material';
 import {
   ClickAwayListener,
   Dialog,
@@ -12,9 +14,7 @@ import {
   InputAdornment,
   List,
   ListItem,
-  ListItemButton,
   Paper,
-  Portal,
   TextField,
 } from '@mui/material';
 import React from 'react';
@@ -28,7 +28,7 @@ export function SearchBar() {
   const { isMobile } = useDisplayMode();
   const { brothers, spots } = useData();
 
-  const [filterInput, setFilterInput] = React.useState('');
+  const { f: filterInput = '' } = useQueryParam();
   const [showFilter, setShowFilter] = React.useState(false);
 
   const filterFn = React.useMemo(() => {
@@ -63,10 +63,12 @@ export function SearchBar() {
 
   const onSearchResultItemClick = (evt) => {
     const { item, type } = evt.currentTarget.dataset;
-    setFilterInput(item);
+    addSearchHistory(item);
+
     if (type === 'spot') {
-      window.location.hash = item;
-      updateQuery('open', 'spot');
+      updateUrl({ f: item, s: item, b: null, hash: item });
+    } else {
+      updateUrl({ f: item, s: null, b: item });
     }
     setShowFilter(false);
   };
@@ -106,23 +108,29 @@ export function SearchBar() {
           className="w-[300px]"
           elevation={3}
           tabIndex={0}
-          onMouseDown={(evt) => {
+          onMouseDown={() => {
             setShowFilter(true);
           }}
-          // onBlur={() => setShowFilter(false)}
         >
           <TextField
             fullWidth
             size="small"
             placeholder="請輸入姓名或是位置編號"
             value={filterInput}
-            onChange={(evt) => setFilterInput(evt.target.value)}
+            onChange={(evt) => updateUrl({ f: evt.target.value }, true)}
             slotProps={{
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
                     <IconButton disabled>
                       <Search />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => updateUrl({ f: '' }, true)}>
+                      <Clear />
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -140,7 +148,7 @@ export function SearchBar() {
               size="small"
               placeholder="請輸入姓名或是位置編號"
               value={filterInput}
-              onChange={(evt) => setFilterInput(evt.target.value)}
+              onChange={(evt) => updateUrl({ f: evt.target.value }, true)}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -152,6 +160,13 @@ export function SearchBar() {
                         }}
                       >
                         <NavigateBefore />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => updateUrl({ f: '' }, true)}>
+                        <Clear />
                       </IconButton>
                     </InputAdornment>
                   ),

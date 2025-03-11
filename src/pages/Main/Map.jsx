@@ -1,14 +1,13 @@
 import { LoadingView } from '@/components/LoadingView';
 import { useData } from '@/contexts/DataContext';
 import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import { updateUrl } from '@/utils/Url';
 import { useHash } from '@/utils/useHash';
 import { useNativeEvent } from '@/utils/useNativeEvent';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { Button, ButtonGroup, Chip, MenuItem, TextField } from '@mui/material';
 import React from 'react';
 import Spot from './Spot';
-import SpotInfoDialog from './SpotInfoDialog';
-import { updateQuery } from '@/utils/Query';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
@@ -53,8 +52,7 @@ export function Map() {
     }
   }, [highlightedSpot, scale]);
 
-  const { xy, open } = useQueryParam();
-  console.log('open', open);
+  const { xy } = useQueryParam();
 
   useNativeEvent(containerRef.current, 'dblclick', (evt) => {
     if (xy) {
@@ -73,14 +71,9 @@ export function Map() {
   const onChipClick = (evt) => {
     setSelectedMapName(evt.currentTarget.dataset.map);
   };
+
   return (
     <div className="w-full h-full flex flex-col border-black border-2 relative">
-      {open === 'spot' && (
-        <SpotInfoDialog
-          info={highlightedSpot}
-          onClose={() => updateQuery('open', null)}
-        />
-      )}
       <div
         className="w-full h-full overflow-auto select-none"
         ref={containerRef}
@@ -102,7 +95,10 @@ export function Map() {
               key={spot.id}
               info={spot}
               onClick={() => {
-                updateQuery('open', 'spot', spot.id);
+                updateUrl({
+                  s: spot.id,
+                  hash: spot.id,
+                });
               }}
             />
           ))}
