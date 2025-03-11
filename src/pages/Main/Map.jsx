@@ -72,11 +72,32 @@ export function Map() {
     setSelectedMapName(evt.currentTarget.dataset.map);
   };
 
+  const mouseMoving = React.useRef();
+
   return (
     <div className="w-full h-full flex flex-col border-black border-2 relative">
       <div
         className="w-full h-full overflow-auto select-none"
         ref={containerRef}
+        onMouseDown={(evt) => {
+          mouseMoving.current = {
+            mouse: { x: evt.pageX, y: evt.pageY },
+            map: {
+              x: evt.currentTarget.scrollLeft,
+              y: evt.currentTarget.scrollTop,
+            },
+          };
+        }}
+        onMouseMove={(evt) => {
+          if (!mouseMoving.current) return;
+          const { mouse, map } = mouseMoving.current;
+          const elm = evt.currentTarget;
+
+          elm.scrollLeft = map.x - evt.pageX + mouse.x;
+          elm.scrollTop = map.y - evt.pageY + mouse.y;
+        }}
+        onMouseUp={(evt) => (mouseMoving.current = null)}
+        onMouseLeave={() => (mouseMoving.current = null)}
       >
         {loadedMap !== selectedMap.file && (
           <LoadingView className={'absolute'} />
@@ -85,7 +106,7 @@ export function Map() {
           <img
             alt="地圖"
             key={selectedMap.file}
-            className="max-h-none max-w-none absolute left-0 top-0"
+            className="max-h-none max-w-none absolute left-0 top-0 select-none pointer-events-none"
             src={selectedMap.file}
             onLoad={(evt) => setLoadedMap(selectedMap.file)}
           />
@@ -110,7 +131,7 @@ export function Map() {
           )}
         </div>
       </div>
-      <div className="absolute flex items-center p-4 z-[1000] opacity-90 bottom-0 right-0 desktop:top-0 desktop:left-[320px] desktop:bottom-auto desktop:right-auto gap-3">
+      <div className="absolute flex items-center p-4 z-[1000] bottom-0 right-0 desktop:top-0 desktop:left-[320px] desktop:bottom-auto desktop:right-auto gap-3">
         {isMobile && (
           <TextField
             value={selectedMapName}
@@ -156,7 +177,7 @@ export function Map() {
                 key={m.name}
                 label={m.name}
                 data-map={m.name}
-                className="select-none"
+                className={'select-none ' + m.name !== selectedMapName}
                 color={m.name === selectedMapName ? 'primary' : 'default'}
                 onClick={m.name === selectedMapName ? undefined : onChipClick}
               />
