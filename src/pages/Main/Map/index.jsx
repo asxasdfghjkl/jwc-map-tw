@@ -122,7 +122,12 @@ export function Map() {
         className="relative overflow-auto w-screen h-screen bg-gray-200"
         ref={containerRef}
       >
-        <div id="map" className="inline-block" style={{ zoom: scale }}>
+        <div
+          id="map"
+          className="inline-block"
+          style={{ zoom: scale }}
+          onDragStart={(evt) => evt.preventDefault()}
+        >
           <img
             alt="地圖"
             key={currentMap.file}
