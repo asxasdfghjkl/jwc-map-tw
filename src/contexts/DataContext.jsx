@@ -7,6 +7,7 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {ShiftData[]} shifts
  * @prop {BrotherData[]} brothers
  * @prop {MapData[]} maps
+ * @prop {SearchOption[]} options
  * @prop {(brotherName: string) => string} getPhone
  */
 
@@ -35,6 +36,12 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {string} name
  * @prop {string} file
  */
+
+/** @typedef {object} SearchOption
+ * @prop {string} label
+ * @prop {string} value
+ * @prop {string} type
+ */
 const context = React.createContext();
 
 export function DataProvider({ children }) {
@@ -49,27 +56,53 @@ export function DataProvider({ children }) {
     ],
   });
   const parsedData = React.useMemo(() => {
+    console.log('parsing google sheet');
+
+    const spots = (data?.[0]?.data ?? []).filter(
+      (spot) => spot.id && spot.map && spot.name
+    );
+
+    const shifts = (data?.[1]?.data ?? []).filter(
+      (shift) => shift.date && shift.spot
+    );
+
+    const brothers = (data?.[2]?.data ?? []).filter((brother) => brother.name);
+
     const phoneBook = {};
 
-    if (data?.[2]?.data) {
-      for (const b of data?.[2]?.data) {
-        phoneBook[b.name] = b.phone;
-      }
+    for (const b of brothers) {
+      phoneBook[b.name] = b.phone;
     }
+
+    const options = [
+      ...brothers.map((b) => ({
+        value: b.name,
+        label: b.name,
+        type: 'brother',
+      })),
+      ...spots.map((s) => ({
+        value: s.id,
+        label: s.id + ' ' + s.name,
+        type: 'spot',
+      })),
+    ];
 
     return {
       loading,
       get spots() {
-        return data?.[0]?.data ?? [];
+        return spots;
       },
       get shifts() {
-        return data?.[1]?.data ?? [];
+        return shifts;
       },
       get brothers() {
-        return data?.[2]?.data ?? [];
+        return brothers;
       },
       get maps() {
         return data?.[3]?.data ?? [];
+      },
+      get options() {
+        return options;
       },
       /** @param {string} brotherName */
       getPhone(brotherName) {

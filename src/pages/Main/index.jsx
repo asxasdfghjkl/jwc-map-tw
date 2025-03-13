@@ -10,20 +10,19 @@ export default function Main() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen">
+      <div className="fixed inset-0 w-screen h-screen">
         <LoadingView />
       </div>
     );
   }
 
   return (
-    <main className="flex flex-row h-full w-full">
+    <>
       <SearchBar />
-
       <Map />
       <SpotInfoDialog />
       <BrotherInfoDialog />
       {/* <BottomSheet summary={<h1>hello</h1>} /> */}
-    </main>
+    </>
   );
 }

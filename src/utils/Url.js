@@ -15,6 +15,6 @@ export function updateUrl(values, replace = true) {
     const queryStr = qs.stringify(query);
 
     const fn = replace ? 'replaceState' : 'pushState';
-    window.history[fn](query, '', `/?${queryStr}${values.hash ? '#' + values.hash : window.location.hash}`)
+    window.history[fn](query, '', `/?${queryStr}${values.hash !== undefined ? ('#' + values.hash) : window.location.hash}`)
     window.dispatchEvent(new CustomEvent('urlchanged'));
 }

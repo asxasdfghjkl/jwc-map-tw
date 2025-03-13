@@ -1,4 +1,4 @@
-export default function Spot({ info, onClick, className }) {
+export default function Spot({ info, onClick, className = '' }) {
   return (
     <div
       className={`attendant-spot ${className}`}

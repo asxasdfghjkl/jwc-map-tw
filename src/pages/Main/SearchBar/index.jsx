@@ -26,7 +26,7 @@ import React from 'react';
  */
 export function SearchBar() {
   const { isMobile } = useDisplayMode();
-  const { brothers, spots } = useData();
+  const { options } = useData();
 
   const { f: filterInput = '' } = useQueryParam();
   const [showFilter, setShowFilter] = React.useState(false);
@@ -35,47 +35,42 @@ export function SearchBar() {
     if (!filterInput) return null;
     try {
       const reg = new RegExp(filterInput, 'i');
-      return (item) => reg.test(item.name);
+      return (item) => reg.test(item.label);
     } catch (ex) {
       return (item) => item.name.includes(filterInput);
     }
   }, [filterInput]);
 
-  const items = React.useMemo(() => {
-    return [
-      ...brothers.map((b) => ({
-        value: b.name,
-        name: b.name,
-        type: 'brother',
-      })),
-      ...spots.map((s) => ({
-        value: s.id,
-        name: s.id + ' ' + s.name,
-        type: 'spot',
-      })),
-    ];
-  }, [brothers, spots]);
-
   const filteredItems = React.useMemo(() => {
     if (!filterFn) return [];
-    return items.filter(filterFn);
-  }, [filterFn, items]);
+    return options.filter(filterFn);
+  }, [filterFn, options]);
 
   const onSearchResultItemClick = (evt) => {
     const { item, type } = evt.currentTarget.dataset;
     addSearchHistory(item);
+    setShowFilter(false);
 
-    if (type === 'spot') {
+    let itemType = type;
+    if (!itemType) {
+      const matched = options.filter((opt) => opt.value === item);
+      if (matched.length === 1) {
+        itemType = matched[0].type;
+      }
+    }
+
+    if (itemType === 'spot') {
       updateUrl({ f: item, s: item, b: null, hash: item });
-    } else {
+    } else if (itemType === 'brother') {
       updateUrl({ f: item, s: null, b: item });
     }
-    setShowFilter(false);
   };
 
   const renderedList = (
     <List>
-      {!filterInput && <SearchHistory />}
+      {!filterInput && (
+        <SearchHistory onHistoryClick={onSearchResultItemClick} />
+      )}
       {!!filterInput && (
         <>
           {filteredItems.length === 0 && (
@@ -83,8 +78,8 @@ export function SearchBar() {
           )}
           {filteredItems.map((item) => (
             <SearchResultItem
-              key={item.name}
-              label={item.name}
+              key={item.label}
+              label={item.label}
               type={item.type}
               value={item.value}
               onClick={onSearchResultItemClick}
@@ -96,7 +91,7 @@ export function SearchBar() {
   );
 
   return (
-    <div className="absolute flex justify-center z-[1000] w-full left-0 top-4 desktop:justify-start desktop:pl-4">
+    <div className="fixed flex justify-center z-[1000] w-full left-0 top-4 desktop:justify-start desktop:pl-4">
       <ClickAwayListener
         onClickAway={() => {
           if (!isMobile) {
