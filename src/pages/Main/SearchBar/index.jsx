@@ -37,7 +37,7 @@ export function SearchBar() {
       const reg = new RegExp(filterInput, 'i');
       return (item) => reg.test(item.label);
     } catch (ex) {
-      return (item) => item.name.includes(filterInput);
+      return (item) => item.label.includes(filterInput);
     }
   }, [filterInput]);
 
