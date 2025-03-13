@@ -78,38 +78,41 @@ export function SearchBar() {
             setShowFilter(true);
           }}
         >
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="請輸入姓名或是位置編號"
-            value={filterInput}
-            autoComplete="off"
-            inputRef={inputRef}
-            onChange={(evt) => updateUrl({ f: evt.target.value }, true)}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton disabled>
-                      <Search />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => {
-                        updateUrl({ f: '' }, true);
-                        inputRef.current?.focus();
-                      }}
-                    >
-                      <Clear />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
+          <form autoComplete="off">
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="請輸入姓名或是位置編號"
+              value={filterInput}
+              autoComplete="off"
+              inputRef={inputRef}
+              onChange={(evt) => updateUrl({ f: evt.target.value }, true)}
+              slotProps={{
+                input: {
+                  'aria-autocomplete': 'none',
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton disabled>
+                        <Search />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => {
+                          updateUrl({ f: '' }, true);
+                          inputRef.current?.focus();
+                        }}
+                      >
+                        <Clear />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          </form>
           {showFilter && (
             <List className="max-h-[500px] overflow-auto">
               {!filterInput && (
