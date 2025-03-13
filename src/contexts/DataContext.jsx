@@ -56,8 +56,6 @@ export function DataProvider({ children }) {
     ],
   });
   const parsedData = React.useMemo(() => {
-    console.log('parsing google sheet');
-
     const spots = (data?.[0]?.data ?? []).filter(
       (spot) => spot.id && spot.map && spot.name
     );

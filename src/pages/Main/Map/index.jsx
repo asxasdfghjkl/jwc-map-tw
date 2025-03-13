@@ -128,7 +128,16 @@ export function Map() {
             key={currentMap.file}
             className="max-h-none max-w-none  select-none pointer-events-none"
             src={currentMap.file}
-            onLoad={(evt) => setLoadedMap(currentMap.file)}
+            onLoad={(evt) => {
+              setLoadedMap(currentMap.file);
+              if (!markedSpot) {
+                const container = containerRef.current;
+                container.scrollTo({
+                  left: container.clientWidth / 2,
+                  top: container.clientHeight / 2,
+                });
+              }
+            }}
           />
 
           {spotsInCurrentMap.map((spot) => (

@@ -66,39 +66,10 @@ export function SearchBar() {
     }
   };
 
-  const renderedList = (
-    <List>
-      {!filterInput && (
-        <SearchHistory onHistoryClick={onSearchResultItemClick} />
-      )}
-      {!!filterInput && (
-        <>
-          {filteredItems.length === 0 && (
-            <ListItem>沒有符合條件的項目</ListItem>
-          )}
-          {filteredItems.map((item) => (
-            <SearchResultItem
-              key={item.label}
-              label={item.label}
-              type={item.type}
-              value={item.value}
-              onClick={onSearchResultItemClick}
-            />
-          ))}
-        </>
-      )}
-    </List>
-  );
-
+  const inputRef = React.useRef();
   return (
     <div className="fixed flex justify-center z-[1000] w-full left-0 top-4 desktop:justify-start desktop:pl-4">
-      <ClickAwayListener
-        onClickAway={() => {
-          if (!isMobile) {
-            setShowFilter(false);
-          }
-        }}
-      >
+      <ClickAwayListener onClickAway={() => setShowFilter(false)}>
         <Paper
           className="w-[300px]"
           elevation={3}
@@ -112,6 +83,8 @@ export function SearchBar() {
             size="small"
             placeholder="請輸入姓名或是位置編號"
             value={filterInput}
+            autoComplete="off"
+            inputRef={inputRef}
             onChange={(evt) => updateUrl({ f: evt.target.value }, true)}
             slotProps={{
               input: {
@@ -124,7 +97,12 @@ export function SearchBar() {
                 ),
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => updateUrl({ f: '' }, true)}>
+                    <IconButton
+                      onClick={() => {
+                        updateUrl({ f: '' }, true);
+                        inputRef.current?.focus();
+                      }}
+                    >
                       <Clear />
                     </IconButton>
                   </InputAdornment>
@@ -132,46 +110,31 @@ export function SearchBar() {
               },
             }}
           />
-          {showFilter && renderedList}
+          {showFilter && (
+            <List className="max-h-[500px] overflow-auto">
+              {!filterInput && (
+                <SearchHistory onHistoryClick={onSearchResultItemClick} />
+              )}
+              {!!filterInput && (
+                <>
+                  {filteredItems.length === 0 && (
+                    <ListItem>沒有符合條件的項目</ListItem>
+                  )}
+                  {filteredItems.map((item) => (
+                    <SearchResultItem
+                      key={item.label}
+                      label={item.label}
+                      type={item.type}
+                      value={item.value}
+                      onClick={onSearchResultItemClick}
+                    />
+                  ))}
+                </>
+              )}
+            </List>
+          )}
         </Paper>
       </ClickAwayListener>
-      <Dialog open={showFilter && isMobile} fullScreen keepMounted>
-        <DialogContent className="flex justify-center p-4 h-full">
-          <div className="flex flex-col w-[300px]">
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="請輸入姓名或是位置編號"
-              value={filterInput}
-              onChange={(evt) => updateUrl({ f: evt.target.value }, true)}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton
-                        onClick={() => {
-                          window.document.body.blur();
-                          setShowFilter(false);
-                        }}
-                      >
-                        <NavigateBefore />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => updateUrl({ f: '' }, true)}>
-                        <Clear />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-            {renderedList}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
