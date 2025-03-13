@@ -46,7 +46,7 @@ export function Map() {
 
   React.useEffect(() => {
     if (markedSpot) {
-      const container = window;
+      const container = containerRef.current;
       container.scrollTo({
         left: markedSpot.x * scale - container.clientWidth / 2,
         top: markedSpot.y * scale - container.clientHeight / 2,

@@ -56,7 +56,7 @@ export default function SpotInfoDialog() {
             label: '指引',
             render: (
               <DialogContentText className="whitespace-pre-line">
-                {spot.description}
+                {spot.description || '目前暫無指引，請與監督聯絡'}
               </DialogContentText>
             ),
           },

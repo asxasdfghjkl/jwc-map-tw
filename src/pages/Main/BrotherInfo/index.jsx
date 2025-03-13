@@ -1,6 +1,7 @@
 import { useData } from '@/contexts/DataContext';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
+import { Phone } from '@mui/icons-material';
 import {
   Dialog,
   DialogContent,
@@ -57,8 +58,9 @@ export function BrotherInfoDialog({}) {
 
     return results.map((s) => (
       <ListItemButton
+        key={s.date + s.spotId + s.time}
         onClick={() =>
-          updateUrl({ open: 'spot', hash: s.spotId, b: null }, false)
+          updateUrl({ s: s.spotId, hash: s.spotId, b: null }, false)
         }
       >
         <ListItemText
@@ -82,6 +84,11 @@ export function BrotherInfoDialog({}) {
           <DialogContentText>
             沒有弟兄的資料，請與聯絡監督聯絡
           </DialogContentText>
+        )}
+        {!!brother?.phone && (
+          <a href={'tel:' + brother.phone}>
+            <Phone /> {brother.phone}
+          </a>
         )}
         <List>
           <ListSubheader className="px-0">班表</ListSubheader>
