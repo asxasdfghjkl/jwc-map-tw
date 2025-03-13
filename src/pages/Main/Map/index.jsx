@@ -138,8 +138,8 @@ export function Map() {
               if (!markedSpot) {
                 const container = containerRef.current;
                 container.scrollTo({
-                  left: container.clientWidth / 2,
-                  top: container.clientHeight / 2,
+                  left: (container.scrollWidth - container.clientWidth) / 2,
+                  top: (container.scrollHeight - container.clientHeight) / 2,
                 });
               }
             }}
