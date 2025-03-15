@@ -25,7 +25,6 @@ import React from 'react';
  * @returns
  */
 export function SearchBar() {
-  const { isMobile } = useDisplayMode();
   const { options } = useData();
 
   const { f: filterInput = '' } = useQueryParam();

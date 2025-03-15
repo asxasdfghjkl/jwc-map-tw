@@ -57,7 +57,7 @@ export function DataProvider({ children }) {
   });
   const parsedData = React.useMemo(() => {
     const spots = (data?.[0]?.data ?? []).filter(
-      (spot) => spot.id && spot.map && spot.name
+      (spot) => spot.id && spot.map && (spot.x || spot.y)
     );
 
     const shifts = (data?.[1]?.data ?? []).filter(
