@@ -41,10 +41,11 @@ export default function SpotInfoDialog() {
   return (
     <InfoPanel
       open={spot}
+      t0
       onClose={() => {
         updateUrl({ s: null }, true);
       }}
-      desktopHeader={spot.name || spot.id}
+      desktopHeader={spot.name}
       mobileSummary={spot.id + ' ' + spot.name}
       key={spot.id}
     >

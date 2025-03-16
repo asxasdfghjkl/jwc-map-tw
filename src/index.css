@@ -24,7 +24,7 @@ body {
 #map-container {
   @apply overflow-auto w-screen h-screen bg-gray-200 fixed;
   left: 0px;
-  transition: left 0.6s;
+  transition: left 0.3s;
 }
 
 @media (width>= 55rem) {

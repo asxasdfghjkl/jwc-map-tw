@@ -44,7 +44,8 @@ export function InfoPanel({
           className="w-[330px] fixed top-0 left-0 bottom-0 z-[100]"
           elevation={3}
         >
-          <DialogTitle>{desktopHeader}</DialogTitle>
+          <DialogTitle className="opacity-0">asdf</DialogTitle>
+          {desktopHeader && <DialogTitle>{desktopHeader}</DialogTitle>}
           {children}
         </Paper>
       </div>

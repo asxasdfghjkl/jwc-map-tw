@@ -70,7 +70,6 @@ export function BrotherInfoDialog({}) {
     <InfoPanel
       open
       onClose={() => updateUrl({ b: null })}
-      desktopHeader={<span className="opacity-0">placeholder</span>}
       mobileSummary={b}
       key={b}
     >
