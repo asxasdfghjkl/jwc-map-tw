@@ -44,7 +44,7 @@ export default function SpotInfoDialog() {
       onClose={() => {
         updateUrl({ s: null }, true);
       }}
-      desktopHeader={spot.name}
+      desktopHeader={spot.name || spot.id}
       mobileSummary={spot.id + ' ' + spot.name}
       key={spot.id}
     >
