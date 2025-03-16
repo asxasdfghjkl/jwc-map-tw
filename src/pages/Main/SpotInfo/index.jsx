@@ -1,7 +1,9 @@
+import { InfoPanel } from '@/components/InfoPanel';
 import { TabView } from '@/components/TabView';
 import { useData } from '@/contexts/DataContext';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
+import { LABELS } from '@/VALUES';
 import {
   Dialog,
   DialogContentText,
@@ -37,17 +39,15 @@ export default function SpotInfoDialog() {
   if (!spot) return null;
 
   return (
-    <Dialog
-      open
+    <InfoPanel
+      open={spot}
       onClose={() => {
         updateUrl({ s: null }, true);
       }}
-      maxWidth="xs"
-      fullWidth
+      desktopHeader={spot.name}
+      mobileSummary={spot.id + ' ' + spot.name}
+      key={spot.id}
     >
-      <DialogTitle>
-        {spot.id} {spot.name}
-      </DialogTitle>
       <TabView
         headerElevation={0}
         tabs={[
@@ -68,23 +68,23 @@ export default function SpotInfoDialog() {
                 <TableHead>
                   <TableRow>
                     <TableCell component="th"></TableCell>
-                    <TableCell component="th">上午 7:30 ~ 12:45</TableCell>
-                    <TableCell component="th">下午12:45 ~ 會後30分鐘</TableCell>
+                    <TableCell component="th">{LABELS.am}</TableCell>
+                    <TableCell component="th">{LABELS.pm}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell component="th">7/4(五)</TableCell>
+                    <TableCell component="th">{LABELS[5]}</TableCell>
                     <ShiftCell name={spotShifts[0]?.am} />
                     <ShiftCell name={spotShifts[0]?.pm} />
                   </TableRow>
                   <TableRow>
-                    <TableCell component="th">7/5(六)</TableCell>
+                    <TableCell component="th">{LABELS[6]}</TableCell>
                     <ShiftCell name={spotShifts[1]?.am} />
                     <ShiftCell name={spotShifts[1]?.pm} />
                   </TableRow>
                   <TableRow>
-                    <TableCell component="th">7/6(日)</TableCell>
+                    <TableCell component="th">{LABELS[7]}</TableCell>
                     <ShiftCell name={spotShifts[2]?.am} />
                     <ShiftCell name={spotShifts[2]?.pm} />
                   </TableRow>
@@ -94,7 +94,7 @@ export default function SpotInfoDialog() {
           },
         ]}
       />
-    </Dialog>
+    </InfoPanel>
   );
 }
 

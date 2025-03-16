@@ -100,7 +100,7 @@ export function SearchBar() {
                     <InputAdornment position="end">
                       <IconButton
                         onClick={() => {
-                          updateUrl({ f: '' }, true);
+                          updateUrl({ f: '', s: '', b: '' }, true);
                           inputRef.current?.focus();
                         }}
                       >

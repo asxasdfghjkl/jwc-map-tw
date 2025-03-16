@@ -118,20 +118,17 @@ export function Map() {
           <LoadingView className={'absolute'} />
         </div>
       )}
-      <div
-        className="relative overflow-auto w-screen h-screen bg-gray-200"
-        ref={containerRef}
-      >
+      <div id="map-container" ref={containerRef}>
         <div
           id="map"
-          className="inline-block"
+          className="relative inline-block"
           style={{ zoom: scale }}
           onDragStart={(evt) => evt.preventDefault()}
         >
           <img
             alt="地圖"
             key={currentMap.file}
-            className="max-h-none max-w-none  select-none pointer-events-none"
+            className="max-h-none max-w-none select-none pointer-events-none"
             src={currentMap.file}
             onLoad={(evt) => {
               setLoadedMap(currentMap.file);
@@ -152,6 +149,8 @@ export function Map() {
               onClick={() => {
                 updateUrl({
                   s: spot.id,
+                  b: '',
+                  f: spot.id,
                   hash: spot.id,
                 });
               }}

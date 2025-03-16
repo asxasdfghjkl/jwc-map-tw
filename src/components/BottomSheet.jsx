@@ -1,4 +1,5 @@
 import { Global } from '@emotion/react';
+import { DialogTitle } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Skeleton from '@mui/material/Skeleton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
@@ -38,7 +39,7 @@ const Puller = styled('div')(({ theme }) => ({
   cursor: 'pointer',
 }));
 
-export function BottomSheet({ summary, children, onClose }) {
+export function BottomSheet({ summary, children }) {
   const [open, setOpen] = React.useState(true);
 
   const toggleDrawer = (newOpen) => () => {
@@ -60,10 +61,11 @@ export function BottomSheet({ summary, children, onClose }) {
         open={open}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
-        swipeAreaWidth={40}
+        swipeAreaWidth={drawerBleeding}
         slotProps={{
           swipeArea: {
             onClick: () => setOpen(true),
+            className: 'cursor-pointer',
           },
         }}
         disableSwipeToOpen={false}
@@ -78,15 +80,10 @@ export function BottomSheet({ summary, children, onClose }) {
             visibility: 'visible',
             right: 0,
             left: 0,
-            cursor: 'pointer',
           }}
         >
           <Puller onClick={() => setOpen((o) => !o)} />
-          <Typography
-            sx={{ p: 2, color: 'text.secondary', height: drawerBleeding }}
-          >
-            {summary}
-          </Typography>
+          <DialogTitle sx={{ height: drawerBleeding }}>{summary}</DialogTitle>
         </StyledBox>
         <StyledBox sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto' }}>
           {children}

@@ -7,6 +7,7 @@
 
 body {
   --spot-size: 30px;
+  --panel-size: 330px;
 }
 
 .attendant-spot {
@@ -18,4 +19,17 @@ body {
   margin-left: calc(var(--spot-size) / -2);
   margin-top: calc(var(--spot-size) / -2);
   z-index: 10;
+}
+
+#map-container {
+  @apply overflow-auto w-screen h-screen bg-gray-200 fixed;
+  left: 0px;
+  transition: left 0.6s;
+}
+
+@media (width>= 55rem) {
+  #root.panel #map-container {
+    width: calc(100vw - var(--panel-size)) !important;
+    left: var(--panel-size) !important;
+  }
 }
