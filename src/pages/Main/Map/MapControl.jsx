@@ -14,7 +14,7 @@ export function MapControl({
   const { maps } = useData();
 
   return (
-    <nav className="fixed flex items-center p-4 z-[1000] bottom-0 right-0 desktop:top-0 desktop:left-[320px] desktop:bottom-auto desktop:right-auto gap-3">
+    <nav id="map-control">
       {isMobile && (
         <TextField
           value={currentMap?.name ?? ''}
