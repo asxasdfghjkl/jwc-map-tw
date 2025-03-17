@@ -34,11 +34,7 @@ export function MapControl({
         </TextField>
       )}
 
-      <ButtonGroup
-        variant="contained"
-        aria-label="Zoom control Buttons"
-        className="h-full"
-      >
+      <ButtonGroup variant="contained" aria-label="Zoom control Buttons">
         <Button disabled={zoom === ZOOM_MIN} onClick={() => onZoomChange?.(-1)}>
           -
         </Button>
