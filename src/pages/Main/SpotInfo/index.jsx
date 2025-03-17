@@ -5,9 +5,7 @@ import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
 import {
-  Dialog,
   DialogContentText,
-  DialogTitle,
   Table,
   TableBody,
   TableCell,
@@ -17,7 +15,7 @@ import {
 import React from 'react';
 
 export default function SpotInfoDialog() {
-  const { shifts, spots } = useData();
+  const { shifts, spots, times } = useData();
   const { s } = useQueryParam();
 
   const spot = React.useMemo(() => {
@@ -47,7 +45,6 @@ export default function SpotInfoDialog() {
       }}
       desktopHeader={spot.name}
       mobileSummary={spot.id + ' ' + spot.name}
-      key={spot.id}
     >
       <TabView
         headerElevation={0}
@@ -69,8 +66,8 @@ export default function SpotInfoDialog() {
                 <TableHead>
                   <TableRow>
                     <TableCell component="th"></TableCell>
-                    <TableCell component="th">{LABELS.am}</TableCell>
-                    <TableCell component="th">{LABELS.pm}</TableCell>
+                    <TableCell component="th">{times[spot.time].am}</TableCell>
+                    <TableCell component="th">{times[spot.time].pm}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

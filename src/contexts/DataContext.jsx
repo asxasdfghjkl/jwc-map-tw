@@ -9,6 +9,7 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {MapData[]} maps
  * @prop {SearchOption[]} options
  * @prop {(brotherName: string) => string} getPhone
+ * @prop {Record<string, TimeData} times
  */
 
 /** @typedef {object} SpotData
@@ -18,6 +19,7 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {string} map
  * @prop {number} x
  * @prop {number} y
+ * @prop {string} time
  */
 
 /** @typedef {object} ShiftData
@@ -42,6 +44,13 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {string} value
  * @prop {string} type
  */
+
+/** @typedef {object} TimeData
+ * @prop {string} id
+ * @prop {string} am
+ * @prop {string} pm
+ */
+
 const context = React.createContext();
 
 export function DataProvider({ children }) {
@@ -53,6 +62,7 @@ export function DataProvider({ children }) {
       { id: `委派`, headerRowIndex: 1 },
       { id: '招待員', headerRowIndex: 1 },
       { id: '地圖' },
+      { id: '時段', headerRowIndex: 1 },
     ],
   });
   const parsedData = React.useMemo(() => {
@@ -85,6 +95,11 @@ export function DataProvider({ children }) {
       })),
     ];
 
+    const times = {};
+    for (let time of data?.[4]?.data ?? []) {
+      times[time.id] = time;
+    }
+
     return {
       loading,
       get spots() {
@@ -98,6 +113,9 @@ export function DataProvider({ children }) {
       },
       get maps() {
         return data?.[3]?.data ?? [];
+      },
+      get times() {
+        return times;
       },
       get options() {
         return options;

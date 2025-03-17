@@ -18,7 +18,7 @@ import React from 'react';
 
 export function BrotherInfoDialog({}) {
   const { b } = useQueryParam();
-  const { brothers, shifts, spots } = useData();
+  const { brothers, shifts, spots, times } = useData();
 
   const brother = React.useMemo(() => {
     if (!b) return null;
@@ -41,7 +41,7 @@ export function BrotherInfoDialog({}) {
 
           results.push({
             date: LABELS[shift.date],
-            time: LABELS[time],
+            time: times[spot.time][time],
             spotId: shift.spot,
             spotName: spot?.name ?? '(此地點不存在，請與監督聯絡)',
           });
@@ -67,12 +67,7 @@ export function BrotherInfoDialog({}) {
   if (!b) return null;
 
   return (
-    <InfoPanel
-      open
-      onClose={() => updateUrl({ b: null })}
-      mobileSummary={b}
-      key={b}
-    >
+    <InfoPanel open onClose={() => updateUrl({ b: null })} mobileSummary={b}>
       <DialogTitle>
         {!!brother?.phone && (
           <Button
