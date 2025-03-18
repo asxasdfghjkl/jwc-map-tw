@@ -40,6 +40,7 @@ export default function SpotInfoDialog() {
   if (!spot) return null;
 
   if (isMobile) {
+    debugger;
     return (
       <InfoPanel
         open={spot}
@@ -136,13 +137,13 @@ export default function SpotInfoDialog() {
                 component="th"
                 className="px-4 pb-2 text-base align-top"
               >
-                {LABELS.am}
+                {times[spot.time].am}
               </TableCell>
               <TableCell
                 component="th"
                 className="px-4 pb-2 text-base align-top"
               >
-                {LABELS.pm}
+                {times[spot.time].pm}
               </TableCell>
             </TableRow>
           </TableHead>
