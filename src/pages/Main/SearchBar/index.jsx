@@ -70,7 +70,7 @@ export function SearchBar() {
     <div className="fixed flex justify-center z-[1000] w-full left-0 top-4 desktop:justify-start desktop:pl-4">
       <ClickAwayListener onClickAway={() => setShowFilter(false)}>
         <Paper
-          className="w-[300px]"
+          className="w-[300px] bg-transparent shadow-none"
           elevation={3}
           tabIndex={0}
           onMouseDown={() => {
@@ -80,7 +80,20 @@ export function SearchBar() {
           <form autoComplete="off">
             <TextField
               fullWidth
-              size="small"
+              className={`outline-none bg-white shadow-md shadow-gray-400 h-12 justify-center ${showFilter ? 'rounded-t-lg': 'rounded-full'}`}
+              size="medium"
+              variant="standard"
+              sx={{
+              ".MuiInputBase-root:before": {
+                borderBottom: "none !important",
+              },
+              ".MuiInput-root:after": {
+                borderBottom: "none !important",
+              },
+              "&:hover:not(.Mui-disabled):before": {
+                borderBottom: "none !important",
+              },
+            }}
               placeholder="請輸入姓名或是位置編號"
               value={filterInput}
               autoComplete="off"
@@ -90,7 +103,7 @@ export function SearchBar() {
                 input: {
                   'aria-autocomplete': 'none',
                   startAdornment: (
-                    <InputAdornment position="start">
+                    <InputAdornment  position="start">
                       <IconButton disabled>
                         <Search />
                       </IconButton>
@@ -113,7 +126,7 @@ export function SearchBar() {
             />
           </form>
           {showFilter && (
-            <List className="max-h-[500px] overflow-auto">
+            <List className="max-h-[500px] overflow-auto bg-white  shadow-md shadow-gray-400 rounded-b-lg">
               {!filterInput && (
                 <SearchHistory onHistoryClick={onSearchResultItemClick} />
               )}

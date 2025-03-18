@@ -146,6 +146,7 @@ export function Map() {
             <Spot
               key={spot.id}
               info={spot}
+              className={markedSpot && markedSpot.id === spot.id ? 'selected animate-bounce' : ''}
               onClick={() => {
                 updateUrl({
                   s: spot.id,
@@ -156,12 +157,12 @@ export function Map() {
               }}
             />
           ))}
-          {!!markedSpot && (
+          {/* {!!markedSpot && (
             <Spot
               info={markedSpot}
-              className="animate-ping z-0 pointer-events-none"
+              className="markedSpot z-0 pointer-events-none"
             />
-          )}
+          )} */}
         </div>
       </div>
     </>

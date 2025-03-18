@@ -3,7 +3,7 @@ import { useData } from '@/contexts/DataContext';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
-import { Phone } from '@mui/icons-material';
+import { Phone, CoPresent } from '@mui/icons-material';
 import {
   Button,
   DialogContentText,
@@ -13,6 +13,8 @@ import {
   ListItemButton,
   ListItemText,
   ListSubheader,
+  Divider,
+  IconButton
 } from '@mui/material';
 import React from 'react';
 
@@ -73,23 +75,37 @@ export function BrotherInfoDialog({}) {
       mobileSummary={b}
       key={b}
     >
-      <DialogTitle>
-        {!!brother?.phone && (
-          <Button
-            variant="contained"
-            href={'tel:' + brother.phone}
-            startIcon={<Phone />}
-          >
-            {brother.phone}
-          </Button>
-        )}
+      <DialogTitle className="pb-0 text-3xl">
+        {brother.name}
       </DialogTitle>
+      <Divider className="my-2" />
       {!brother && (
         <DialogContentText>沒有弟兄的資料，請與聯絡監督聯絡</DialogContentText>
       )}
-
-      <List>
-        <ListSubheader>班表</ListSubheader>
+      <List className="p-0">
+        <ListItem className="cursor-pointer active:bg-gray-100  hover:bg-gray-100">
+          <IconButton
+            className="bg-blue-600 rounded-full max-w-[30px] max-h-[30px]"
+            variant="contained"
+            href={'tel:' + brother.phone}
+            aria-label="Phone"
+          >
+            <Phone className="text-white w-[15px]"/>
+            </IconButton><span className='ml-10 text-lg'>{brother.phone}</span>
+        </ListItem>
+        <ListItem className="cursor-pointer active:bg-gray-100 hover:bg-gray-100">
+          <IconButton
+            className="bg-blue-600 rounded-full max-w-[30px] max-h-[30px]"
+            variant="contained"
+            aria-label="CoPresent"
+          >
+            <CoPresent className="text-white w-[15px]"/>
+            </IconButton><span className='ml-10 text-lg'>{brother.cong}</span>
+        </ListItem>
+      </List>
+      <Divider className="my-2" />
+      <DialogTitle>班表</DialogTitle>
+      <List className="h-[70%] overflow-y-auto">
         {shiftList.length === 0 && (
           <ListItem>
             <ListItemText primary="目前沒有委派" />

@@ -45,7 +45,7 @@ export function InfoPanel({
           elevation={3}
         >
           <DialogTitle className="opacity-0">asdf</DialogTitle>
-          {desktopHeader && <DialogTitle>{desktopHeader}</DialogTitle>}
+          {desktopHeader && <DialogTitle className="mt-2 text-3xl">{desktopHeader}</DialogTitle>}
           {children}
         </Paper>
       </div>

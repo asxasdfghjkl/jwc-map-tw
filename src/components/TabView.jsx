@@ -17,7 +17,7 @@ export function TabView({ tabs, headerElevation = 3 }) {
   const [inited] = React.useState({ [tabs[0].name]: true });
 
   return (
-    <Paper className="flex flex-col">
+    <Paper className="flex flex-col shadow-none">
       <AppBar position="static" color="inherit" elevation={headerElevation}>
         <Tabs
           variant="fullWidth"

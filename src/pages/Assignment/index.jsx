@@ -44,10 +44,10 @@ const Assignment = ({ assignment, attendant }) => {
           <div className="text-base lg:text-lg">
             服務時段：
             {assignment.isSeat ? (
-              "上午8:00 ～ 大會結束後40分鐘"
+              "8:00 ～ 大會結束後40分鐘"
             ) : (
               <div className="pl-6 text-sm lg:text-base">
-                <div>上午班次：上午8:00 ～ 上午節目結束後15分鐘</div>
+                <div>上午班次：8:00 ～ 上午節目結束後15分鐘</div>
                 <div>下午班次：上午節目結束後15分鐘 ～ 大會結束後40分鐘</div>
               </div>
             )}
