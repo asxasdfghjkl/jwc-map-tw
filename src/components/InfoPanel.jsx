@@ -41,11 +41,13 @@ export function InfoPanel({
     <Portal container={window.document.body}>
       <div className="panel-container">
         <Paper
-          className="w-[330px] fixed top-0 left-0 bottom-0 z-[100]"
+          className="w-[330px] fixed top-0 left-0 bottom-0 z-[100] overflow-y-auto"
           elevation={3}
         >
-          <DialogTitle className="opacity-0">asdf</DialogTitle>
-          {desktopHeader && <DialogTitle className="mt-2 text-3xl">{desktopHeader}</DialogTitle>}
+          <DialogTitle className="opacity-0">placeholder</DialogTitle>
+          {desktopHeader && (
+            <DialogTitle className="mt-2 text-3xl">{desktopHeader}</DialogTitle>
+          )}
           {children}
         </Paper>
       </div>
