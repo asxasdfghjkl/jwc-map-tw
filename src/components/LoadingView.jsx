@@ -5,7 +5,7 @@ export function LoadingView({ className }) {
     <div
       className={`h-full w-full flex justify-center items-center ${className}`}
     >
-      <CircularProgress />
+      <CircularProgress sx={{ color: "#7c86ff" }}/>
       <Typography variant="h4" className="pl-3">
         載入中
       </Typography>

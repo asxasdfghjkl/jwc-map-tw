@@ -11,7 +11,7 @@ body {
 }
 
 .attendant-spot {
-  @apply absolute text-white bg-red-600 rounded-full flex justify-center items-center select-none cursor-pointer hover:bg-red-400 font-bold;
+  @apply absolute text-white bg-indigo-400 rounded-full flex justify-center items-center select-none cursor-pointer hover:bg-indigo-800 font-bold;
   border: 1px solid white;
   width: var(--spot-size);
   height: var(--spot-size);
@@ -19,6 +19,38 @@ body {
   margin-left: calc(var(--spot-size) / -2);
   margin-top: calc(var(--spot-size) / -2);
   z-index: 10;
+}
+.attendant-spot::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid #7c86ff;
+}
+.attendant-spot:hover::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid #372aac;
+}
+.attendant-spot.selected {
+  background-color: #372aac!important
+}
+.attendant-spot.selected::before {
+  border-top: 15px solid #372aac;
 }
 
 #map-container {

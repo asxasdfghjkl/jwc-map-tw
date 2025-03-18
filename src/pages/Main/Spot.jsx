@@ -4,7 +4,7 @@ export default function Spot({ info, onClick, className = '' }) {
       className={`attendant-spot ${className}`}
       style={{
         left: info.x + 'px',
-        top: info.y + 'px',
+        top: (Number(info.y) -18) + 'px',
       }}
       onClick={onClick}
     >

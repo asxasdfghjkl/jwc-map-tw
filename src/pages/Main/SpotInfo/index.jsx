@@ -4,6 +4,8 @@ import { useData } from '@/contexts/DataContext';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
+import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import { Divider } from "@mui/material";
 import {
   DialogContentText,
   Table,
@@ -17,7 +19,7 @@ import React from 'react';
 export default function SpotInfoDialog() {
   const { shifts, spots, times } = useData();
   const { s } = useQueryParam();
-
+  const { isMobile } = useDisplayMode();
   const spot = React.useMemo(() => {
     if (!s) return null;
 
@@ -36,7 +38,8 @@ export default function SpotInfoDialog() {
 
   if (!spot) return null;
 
-  return (
+  if(isMobile) {
+    return (
     <InfoPanel
       open={spot}
       t0
@@ -94,15 +97,65 @@ export default function SpotInfoDialog() {
       />
     </InfoPanel>
   );
+  }
+  return (
+    <InfoPanel
+      open={spot}
+      t0
+      onClose={() => {
+        updateUrl({ s: null }, true);
+      }}
+      desktopHeader={spot.name}
+      mobileSummary={spot.id + ' ' + spot.name}
+      key={spot.id}
+    >
+      <Divider className="my-2" />
+      <div className="pb-4">
+        <DialogTitle>指引</DialogTitle>
+        <DialogContentText className="whitespace-pre-line px-6 text-gray-800 text-lg">
+          {spot.description || '目前暫無指引，請與監督聯絡'}
+        </DialogContentText>
+      </div>
+      <Divider className="my-2" />
+      <div>
+        <DialogTitle className='pb-0'>班表</DialogTitle>
+        <Table className="w-[calc(100%-2rem)] ml-4 text-center">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ width: "50px", }} className="px-0 py-4 align-top" component="th"></TableCell>
+              <TableCell component="th" className="px-4 pb-2 text-base align-top">{LABELS.am}</TableCell>
+              <TableCell component="th" className="px-4 pb-2 text-base align-top">{LABELS.pm}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell sx={{ width: "50px" }} className="px-0 py-4 align-top" component="th">{LABELS[5]}</TableCell>
+              <ShiftCell name={spotShifts[0]?.am} />
+              <ShiftCell className="p-2" name={spotShifts[0]?.pm} />
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ width: "50px" }} className="px-0 py-4 align-top" component="th">{LABELS[6]}</TableCell>
+              <ShiftCell name={spotShifts[1]?.am} />
+              <ShiftCell name={spotShifts[1]?.pm} />
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ width: "50px" }} className="px-0 py-4 align-top" component="th">{LABELS[7]}</TableCell>
+              <ShiftCell name={spotShifts[2]?.am} />
+              <ShiftCell name={spotShifts[2]?.pm} />
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </InfoPanel>
+  );
 }
 
 function ShiftCell({ name }) {
   const { getPhone } = useData();
   return (
-    <TableCell>
-      {name}
-      <br />
-      <a href={`tel:${getPhone(name)}`}>{getPhone(name)}</a>
+    <TableCell className="px-4 py-2 align-top">
+      <p className="text-xl">{name}</p>
+      <a className='text-base' href={`tel:${getPhone(name)}`}>{getPhone(name)}</a>
     </TableCell>
   );
 }
