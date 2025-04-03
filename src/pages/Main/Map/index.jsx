@@ -118,7 +118,13 @@ export function Map() {
           <LoadingView className={'absolute'} />
         </div>
       )}
-      <div id="map-container" ref={containerRef}>
+      <div
+        id="map-container"
+        ref={containerRef}
+        style={{
+          '--spot-size': `${30 / scale}px`,
+        }}
+      >
         <div
           id="map"
           className="relative inline-block"
@@ -146,7 +152,11 @@ export function Map() {
             <Spot
               key={spot.id}
               info={spot}
-              className={markedSpot && markedSpot.id === spot.id ? 'selected animate-bounce' : ''}
+              className={
+                markedSpot && markedSpot.id === spot.id
+                  ? 'selected animate-bounce'
+                  : ''
+              }
               onClick={() => {
                 updateUrl({
                   s: spot.id,

@@ -12,45 +12,45 @@ body {
 
 .attendant-spot {
   @apply absolute text-white bg-indigo-400 rounded-full flex justify-center items-center select-none cursor-pointer hover:bg-indigo-800 font-bold;
-  border: 1px solid white;
+  border: calc(var(--spot-size) / 15) solid white;
   width: var(--spot-size);
   height: var(--spot-size);
-  font-size: 10px;
+  font-size: calc(var(--spot-size) / 3);
   margin-left: calc(var(--spot-size) / -2);
-  margin-top: calc(var(--spot-size) / -2);
+  margin-top: calc(var(--spot-size) * -1.1);
   z-index: 10;
 }
 .attendant-spot::before {
-  content: "";
+  content: '';
   position: absolute;
   z-index: -1;
-  bottom: -6px;
+  bottom: calc(var(--spot-size) / -5);
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 15px solid #7c86ff;
+  border-left: calc(var(--spot-size) / 3) solid transparent;
+  border-right: calc(var(--spot-size) / 3) solid transparent;
+  border-top: calc(var(--spot-size) / 2) solid #7c86ff;
 }
 .attendant-spot:hover::before {
-  content: "";
+  content: '';
   position: absolute;
   z-index: -1;
-  bottom: -6px;
+  bottom: calc(var(--spot-size) / -5);
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 15px solid #372aac;
+  border-left: calc(var(--spot-size) / 3) solid transparent;
+  border-right: calc(var(--spot-size) / 3) solid transparent;
+  border-top: calc(var(--spot-size) / 2) solid #372aac;
 }
 .attendant-spot.selected {
-  background-color: #372aac!important
+  background-color: #372aac !important;
 }
 .attendant-spot.selected::before {
-  border-top: 15px solid #372aac;
+  border-top: calc(var(--spot-size) / 2) solid #372aac;
 }
 
 #map-container {

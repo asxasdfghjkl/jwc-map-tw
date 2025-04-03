@@ -40,11 +40,9 @@ export default function SpotInfoDialog() {
   if (!spot) return null;
 
   if (isMobile) {
-    debugger;
     return (
       <InfoPanel
         open={spot}
-        t0
         onClose={() => {
           updateUrl({ s: null }, true);
         }}
