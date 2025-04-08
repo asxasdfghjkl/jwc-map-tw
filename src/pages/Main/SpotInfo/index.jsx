@@ -18,7 +18,7 @@ import {
 import React from 'react';
 
 export default function SpotInfoDialog() {
-  const { shifts, spots, times } = useData();
+  const { spots, times } = useData();
   const { s } = useQueryParam();
   const { isMobile } = useDisplayMode();
   const spot = React.useMemo(() => {
@@ -26,16 +26,6 @@ export default function SpotInfoDialog() {
 
     return spots.find((sp) => sp.id === s);
   }, [s, spots]);
-
-  const spotShifts = React.useMemo(() => {
-    if (!spot) return [];
-
-    return [5, 6, 7].map((day) => {
-      return shifts.find(
-        (shift) => shift.date == day && shift.spot === spot.id
-      );
-    });
-  }, [shifts, spot]);
 
   if (!spot) return null;
 
@@ -80,18 +70,18 @@ export default function SpotInfoDialog() {
                   <TableBody>
                     <TableRow>
                       <TableCell component="th">{LABELS[5]}</TableCell>
-                      <ShiftCell name={spotShifts[0]?.am} />
-                      <ShiftCell name={spotShifts[0]?.pm} />
+                      <ShiftCell name={spot.am5} />
+                      <ShiftCell name={spot.pm5} />
                     </TableRow>
                     <TableRow>
                       <TableCell component="th">{LABELS[6]}</TableCell>
-                      <ShiftCell name={spotShifts[1]?.am} />
-                      <ShiftCell name={spotShifts[1]?.pm} />
+                      <ShiftCell name={spot.am6} />
+                      <ShiftCell name={spot.pm6} />
                     </TableRow>
                     <TableRow>
                       <TableCell component="th">{LABELS[7]}</TableCell>
-                      <ShiftCell name={spotShifts[2]?.am} />
-                      <ShiftCell name={spotShifts[2]?.pm} />
+                      <ShiftCell name={spot.am7} />
+                      <ShiftCell name={spot.pm7} />
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -154,8 +144,8 @@ export default function SpotInfoDialog() {
               >
                 {LABELS[5]}
               </TableCell>
-              <ShiftCell name={spotShifts[0]?.am} />
-              <ShiftCell className="p-2" name={spotShifts[0]?.pm} />
+              <ShiftCell name={spot.am5} />
+              <ShiftCell name={spot.pm5} />
             </TableRow>
             <TableRow>
               <TableCell
@@ -165,8 +155,8 @@ export default function SpotInfoDialog() {
               >
                 {LABELS[6]}
               </TableCell>
-              <ShiftCell name={spotShifts[1]?.am} />
-              <ShiftCell name={spotShifts[1]?.pm} />
+              <ShiftCell name={spot.am6} />
+              <ShiftCell name={spot.pm6} />
             </TableRow>
             <TableRow>
               <TableCell
@@ -176,8 +166,8 @@ export default function SpotInfoDialog() {
               >
                 {LABELS[7]}
               </TableCell>
-              <ShiftCell name={spotShifts[2]?.am} />
-              <ShiftCell name={spotShifts[2]?.pm} />
+              <ShiftCell name={spot.am7} />
+              <ShiftCell name={spot.pm7} />
             </TableRow>
           </TableBody>
         </Table>

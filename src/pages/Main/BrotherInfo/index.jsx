@@ -3,25 +3,22 @@ import { useData } from '@/contexts/DataContext';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
-import { Phone, CoPresent } from '@mui/icons-material';
+import { CoPresent, Phone } from '@mui/icons-material';
 import {
-  Button,
   DialogContentText,
   DialogTitle,
+  Divider,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
-  ListSubheader,
-  Divider,
-  IconButton,
-  ListItemIcon,
 } from '@mui/material';
 import React from 'react';
 
 export function BrotherInfoDialog({}) {
   const { b } = useQueryParam();
-  const { brothers, shifts, spots, times } = useData();
+  const { brothers, spots, times } = useData();
 
   const brother = React.useMemo(() => {
     if (!b) return null;
@@ -33,24 +30,28 @@ export function BrotherInfoDialog({}) {
   const shiftList = React.useMemo(() => {
     if (!brother) return [];
     const results = [];
-    const assignedShifts = shifts
-      .filter((s) => s.am === brother.name || s.pm === brother.name)
-      .sort((a, b) => a.date - b.date);
+    const assignedSpots = spots
+      .map((s) => ({
+        ...s,
+        shifts: [s.am5, s.pm5, s.am6, s.pm6, s.am7, s.pm7],
+      }))
+      .filter((s) => s.shifts.includes(brother.name))
+      .sort((a, b) => a.id.localeCompare(b.id));
 
-    for (let shift of assignedShifts) {
+    [5, 6, 7].forEach((day) => {
       ['am', 'pm'].forEach((time) => {
-        if (shift[time] === brother.name) {
-          const spot = spots.find((s) => s.id === shift.spot);
-
-          results.push({
-            date: LABELS[shift.date],
-            time: times[spot.time][time],
-            spotId: shift.spot,
-            spotName: spot?.name ?? '(此地點不存在，請與監督聯絡)',
-          });
+        for (const s of assignedSpots) {
+          if (s[`${time}${day}`] === brother.name) {
+            results.push({
+              date: LABELS[day],
+              time: times[s.time][time],
+              spotId: s.id,
+              spotName: s.name ?? '(此地點不存在，請與監督聯絡)',
+            });
+          }
         }
       });
-    }
+    });
 
     return results.map((s) => (
       <ListItemButton
@@ -65,7 +66,7 @@ export function BrotherInfoDialog({}) {
         />
       </ListItemButton>
     ));
-  }, [shifts, brother, spots]);
+  }, [brother, spots]);
 
   if (!b) return null;
 

@@ -11,7 +11,8 @@ body {
 }
 
 .attendant-spot {
-  @apply absolute text-white bg-indigo-400 rounded-full flex justify-center items-center select-none cursor-pointer hover:bg-indigo-800 font-bold;
+  @apply absolute text-white rounded-full flex justify-center items-center select-none cursor-pointer  font-bold;
+  background: var(--color);
   border: calc(var(--spot-size) / 15) solid white;
   width: var(--spot-size);
   height: var(--spot-size);
@@ -20,6 +21,7 @@ body {
   margin-top: calc(var(--spot-size) * -1.1);
   z-index: 10;
 }
+
 .attendant-spot::before {
   content: '';
   position: absolute;
@@ -31,26 +33,17 @@ body {
   height: 0;
   border-left: calc(var(--spot-size) / 3) solid transparent;
   border-right: calc(var(--spot-size) / 3) solid transparent;
-  border-top: calc(var(--spot-size) / 2) solid #7c86ff;
+  border-top: calc(var(--spot-size) / 2) solid var(--color);
 }
-.attendant-spot:hover::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  bottom: calc(var(--spot-size) / -5);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: calc(var(--spot-size) / 3) solid transparent;
-  border-right: calc(var(--spot-size) / 3) solid transparent;
-  border-top: calc(var(--spot-size) / 2) solid #372aac;
-}
+
+.attendant-spot:hover,
 .attendant-spot.selected {
-  background-color: #372aac !important;
+  background: var(--color-a);
 }
+
+.attendant-spot:hover::before,
 .attendant-spot.selected::before {
-  border-top: calc(var(--spot-size) / 2) solid #372aac;
+  border-top-color: var(--color-a);
 }
 
 #map-container {

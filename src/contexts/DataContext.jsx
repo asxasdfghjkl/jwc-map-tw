@@ -1,10 +1,10 @@
+import { GlobalStyles } from '@mui/material';
 import React from 'react';
 import useGoogleSheets from 'use-google-sheets';
 
 /** @typedef {object} SiteData
  * @prop {boolean} loading
  * @prop {SpotData[]} spots
- * @prop {ShiftData[]} shifts
  * @prop {BrotherData[]} brothers
  * @prop {MapData[]} maps
  * @prop {SearchOption[]} options
@@ -20,13 +20,12 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {number} x
  * @prop {number} y
  * @prop {string} time
- */
-
-/** @typedef {object} ShiftData
- * @prop {string} date
- * @prop {string} spot spot.Id
- * @prop {string} am brother.name
- * @prop {string} pm brother.name
+ * @prop {string} am5
+ * @prop {string} pm5
+ * @prop {string} am6
+ * @prop {string} pm6
+ * @prop {string} am7
+ * @prop {string} pm7
  */
 
 /** @typedef {object} BrotherData
@@ -49,6 +48,8 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {string} id
  * @prop {string} am
  * @prop {string} pm
+ * @prop {string} color
+ * @prop {string} altColor
  */
 
 const context = React.createContext();
@@ -59,7 +60,6 @@ export function DataProvider({ children }) {
     sheetId: import.meta.env.VITE_GOOGLE_SHEET_ID,
     sheetsOptions: [
       { id: `地點`, headerRowIndex: 1 },
-      { id: `委派`, headerRowIndex: 1 },
       { id: '招待員', headerRowIndex: 1 },
       { id: '地圖' },
       { id: '時段', headerRowIndex: 1 },
@@ -70,11 +70,7 @@ export function DataProvider({ children }) {
       (spot) => spot.id && spot.map && (spot.x || spot.y)
     );
 
-    const shifts = (data?.[1]?.data ?? []).filter(
-      (shift) => shift.date && shift.spot
-    );
-
-    const brothers = (data?.[2]?.data ?? []).filter((brother) => brother.name);
+    const brothers = (data?.[1]?.data ?? []).filter((brother) => brother.name);
 
     const phoneBook = {};
 
@@ -96,8 +92,13 @@ export function DataProvider({ children }) {
     ];
 
     const times = {};
-    for (let time of data?.[4]?.data ?? []) {
+    const colors = {};
+    for (let time of data?.[3]?.data ?? []) {
       times[time.id] = time;
+      colors[`.t-${time.id}`] = {
+        '--color': time.color,
+        '--color-a': time.altColor,
+      };
     }
 
     return {
@@ -105,14 +106,11 @@ export function DataProvider({ children }) {
       get spots() {
         return spots;
       },
-      get shifts() {
-        return shifts;
-      },
       get brothers() {
         return brothers;
       },
       get maps() {
-        return data?.[3]?.data ?? [];
+        return data?.[2]?.data ?? [];
       },
       get times() {
         return times;
@@ -124,10 +122,16 @@ export function DataProvider({ children }) {
       getPhone(brotherName) {
         return phoneBook[brotherName];
       },
+      colors,
     };
   }, [data, loading]);
 
-  return <context.Provider value={parsedData}>{children}</context.Provider>;
+  return (
+    <context.Provider value={parsedData}>
+      <GlobalStyles styles={parsedData.colors} />
+      {children}
+    </context.Provider>
+  );
 }
 
 /**

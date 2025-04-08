@@ -1,14 +1,13 @@
 import { LoadingView } from '@/components/LoadingView';
 import { useData } from '@/contexts/DataContext';
-import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import { MapControl } from '@/pages/Main/Map/MapControl';
 import { updateUrl } from '@/utils/Url';
 import { useHash } from '@/utils/useHash';
 import { useNativeEvent } from '@/utils/useNativeEvent';
 import { useQueryParam } from '@/utils/useQueryParam';
-import { Button, ButtonGroup, Chip, MenuItem, TextField } from '@mui/material';
 import React from 'react';
 import Spot from '../Spot';
-import { MapControl } from '@/pages/Main/Map/MapControl';
+import clsx from 'clsx';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
@@ -152,11 +151,12 @@ export function Map() {
             <Spot
               key={spot.id}
               info={spot}
-              className={
-                markedSpot && markedSpot.id === spot.id
-                  ? 'selected animate-bounce'
-                  : ''
-              }
+              className={clsx(
+                `t-${spot.time}`,
+                markedSpot &&
+                  markedSpot.id === spot.id &&
+                  'selected animate-bounce'
+              )}
               onClick={() => {
                 updateUrl({
                   s: spot.id,
