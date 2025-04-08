@@ -58,7 +58,7 @@ export function Map() {
 
   const containerRef = React.useRef();
 
-  const { xy } = useQueryParam();
+  const { xy, scale: spotScale } = useQueryParam();
   useNativeEvent(containerRef.current, 'dblclick', (evt) => {
     if (xy) {
       if (evt.target.id !== 'map') {
@@ -122,7 +122,7 @@ export function Map() {
         id="map-container"
         ref={containerRef}
         style={{
-          '--spot-size': `${30 / scale}px`,
+          '--spot-size': `${30 / (spotScale ? 1 : scale)}px`,
         }}
       >
         <div
