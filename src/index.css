@@ -7,7 +7,9 @@
 
 body {
   --spot-size: 30px;
+  --spot-font: calc(var(--spot-size) / 3);
   --panel-size: 330px;
+  --sacle: 1;
 }
 
 .attendant-spot {
@@ -16,10 +18,12 @@ body {
   border: calc(var(--spot-size) / 15) solid white;
   width: var(--spot-size);
   height: var(--spot-size);
-  font-size: calc(var(--spot-size) / 3);
+  font-size: var(--spot-font);
+  font-size: 10px;
   margin-left: calc(var(--spot-size) / -2);
   margin-top: calc(var(--spot-size) * -1.1);
   z-index: 10;
+  zoom: var(--scale);
 }
 
 .attendant-spot::before {

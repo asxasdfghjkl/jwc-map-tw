@@ -1,10 +1,10 @@
-export default function Spot({ info, onClick, className = '' }) {
+export default function Spot({ info, scale, onClick, className = '' }) {
   return (
     <div
       className={`attendant-spot ${className}`}
       style={{
-        left: info.x + 'px',
-        top: info.y + 'px',
+        left: info.x * scale + 'px',
+        top: info.y * scale + 'px',
       }}
       onClick={onClick}
     >
