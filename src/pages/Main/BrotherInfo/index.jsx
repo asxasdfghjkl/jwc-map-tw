@@ -35,13 +35,13 @@ export function BrotherInfoDialog({}) {
         ...s,
         shifts: [s.am5, s.pm5, s.am6, s.pm6, s.am7, s.pm7],
       }))
-      .filter((s) => s.shifts.includes(brother.name))
+      .filter((s) => s.shifts.includes(brother.id))
       .sort((a, b) => a.id.localeCompare(b.id));
 
     [5, 6, 7].forEach((day) => {
       ['am', 'pm'].forEach((time) => {
         for (const s of assignedSpots) {
-          if (s[`${time}${day}`] === brother.name) {
+          if (s[`${time}${day}`] === brother.id) {
             results.push({
               date: LABELS[day],
               time: times[s.time][time],
@@ -75,9 +75,10 @@ export function BrotherInfoDialog({}) {
       open
       onClose={() => updateUrl({ b: null })}
       mobileSummary={b}
+      desktopHeader={b}
       key={b}
     >
-      <DialogTitle className="pb-0 text-3xl">{brother.name}</DialogTitle>
+      {/* <DialogTitle className="pb-0 text-3xl">{brother.name}</DialogTitle> */}
       <Divider className="my-2" />
       {!brother && (
         <DialogContentText>沒有弟兄的資料，請與聯絡監督聯絡</DialogContentText>

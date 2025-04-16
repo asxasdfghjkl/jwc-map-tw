@@ -3,12 +3,12 @@ export default function Spot({ info, scale, onClick, className = '' }) {
     <div
       className={`attendant-spot ${className}`}
       style={{
-        left: info.x * scale + 'px',
-        top: info.y * scale + 'px',
+        left: info.x + 'px',
+        top: info.y + 'px',
       }}
       onClick={onClick}
     >
-      {info.id}
+      <span style={{ zoom: 'var(--z)' }}>{info.id}</span>
     </div>
   );
 }

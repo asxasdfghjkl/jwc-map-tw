@@ -18,7 +18,7 @@ import {
 import React from 'react';
 
 export default function SpotInfoDialog() {
-  const { spots, times } = useData();
+  const { spots, times, getPhone } = useData();
   const { s } = useQueryParam();
   const { isMobile } = useDisplayMode();
   const spot = React.useMemo(() => {
@@ -46,9 +46,22 @@ export default function SpotInfoDialog() {
               name: 'instruction',
               label: '指引',
               render: (
-                <DialogContentText className="whitespace-pre-line">
-                  {spot.description || '目前暫無指引，請與監督聯絡'}
-                </DialogContentText>
+                <>
+                  <DialogContentText className="whitespace-pre-line text-lg">
+                    組長: {spot.overseer}
+                    <br />
+                    <a
+                      className="text-base"
+                      href={`tel:${getPhone(spot.overseer)}`}
+                    >
+                      {getPhone(spot.overseer)}
+                    </a>
+                  </DialogContentText>
+                  <hr className="mb-3" />
+                  <DialogContentText className="whitespace-pre-line">
+                    {spot.description || '目前暫無指引，請與監督聯絡'}
+                  </DialogContentText>
+                </>
               ),
             },
             {
@@ -95,7 +108,6 @@ export default function SpotInfoDialog() {
   return (
     <InfoPanel
       open={spot}
-      t0
       onClose={() => {
         updateUrl({ s: null }, true);
       }}
@@ -105,11 +117,22 @@ export default function SpotInfoDialog() {
     >
       <Divider className="my-2" />
       <div className="pb-4">
+        <DialogTitle>組長</DialogTitle>
+        <DialogContentText className="whitespace-pre-line px-6 text-gray-800 text-lg">
+          {spot.overseer}
+          <br />
+          <a className="text-base" href={`tel:${getPhone(spot.overseer)}`}>
+            {getPhone(spot.overseer)}
+          </a>
+        </DialogContentText>
         <DialogTitle>指引</DialogTitle>
         <DialogContentText className="whitespace-pre-line px-6 text-gray-800 text-lg">
           {spot.description || '目前暫無指引，請與監督聯絡'}
         </DialogContentText>
       </div>
+      <Divider className="my-2" />
+      <DialogTitle className="pb-0">組長</DialogTitle>
+      <DialogContentText>{spot.overseer}</DialogContentText>
       <Divider className="my-2" />
       <div>
         <DialogTitle className="pb-0">班表</DialogTitle>

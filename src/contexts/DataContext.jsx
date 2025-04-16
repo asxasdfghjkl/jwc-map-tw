@@ -20,6 +20,7 @@ import useGoogleSheets from 'use-google-sheets';
  * @prop {number} x
  * @prop {number} y
  * @prop {string} time
+ * @prop {string} overseer
  * @prop {string} am5
  * @prop {string} pm5
  * @prop {string} am6
@@ -29,6 +30,8 @@ import useGoogleSheets from 'use-google-sheets';
  */
 
 /** @typedef {object} BrotherData
+ * @prop {string} id
+ * @prop {string} serial
  * @prop {string} name
  * @prop {string} phone
  */
@@ -75,13 +78,13 @@ export function DataProvider({ children }) {
     const phoneBook = {};
 
     for (const b of brothers) {
-      phoneBook[b.name] = b.phone;
+      phoneBook[b.id] = b.phone;
     }
 
     const options = [
       ...brothers.map((b) => ({
         value: b.name,
-        label: b.name,
+        label: b.id,
         type: 'brother',
       })),
       ...spots.map((s) => ({

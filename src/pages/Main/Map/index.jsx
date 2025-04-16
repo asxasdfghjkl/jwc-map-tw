@@ -121,7 +121,7 @@ export function Map() {
         id="map-container"
         ref={containerRef}
         style={{
-          '--scale': 1 / scale,
+          '--z': scale,
         }}
       >
         <div

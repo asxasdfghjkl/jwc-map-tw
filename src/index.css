@@ -18,12 +18,12 @@ body {
   border: calc(var(--spot-size) / 15) solid white;
   width: var(--spot-size);
   height: var(--spot-size);
-  font-size: var(--spot-font);
+  /* font-size: var(--spot-font); */
   font-size: 10px;
   margin-left: calc(var(--spot-size) / -2);
   margin-top: calc(var(--spot-size) * -1.1);
   z-index: 10;
-  zoom: var(--scale);
+  /* zoom: var(--scale); */
 }
 
 .attendant-spot::before {
