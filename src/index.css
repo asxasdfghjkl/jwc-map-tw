@@ -23,7 +23,7 @@ body {
   margin-left: calc(var(--spot-size) / -2);
   margin-top: calc(var(--spot-size) * -1.1);
   z-index: 10;
-  /* zoom: var(--scale); */
+  zoom: var(--scale);
 }
 
 .attendant-spot::before {
