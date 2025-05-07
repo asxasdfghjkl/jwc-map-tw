@@ -131,9 +131,6 @@ export default function SpotInfoDialog() {
         </DialogContentText>
       </div>
       <Divider className="my-2" />
-      <DialogTitle className="pb-0">組長</DialogTitle>
-      <DialogContentText>{spot.overseer}</DialogContentText>
-      <Divider className="my-2" />
       <div>
         <DialogTitle className="pb-0">班表</DialogTitle>
         <Table className="w-[calc(100%-2rem)] ml-4 text-center">

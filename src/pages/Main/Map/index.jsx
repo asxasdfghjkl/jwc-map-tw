@@ -8,6 +8,7 @@ import { useQueryParam } from '@/utils/useQueryParam';
 import React from 'react';
 import Spot from '../Spot';
 import clsx from 'clsx';
+import ReminderComponent from '@/pages/Reminder';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
@@ -98,8 +99,15 @@ export function Map() {
     mouseMoving.current = null;
   });
 
+  const [showInstruction, setShowInstruction] = React.useState(
+    !localStorage.instruction
+  );
+
   return (
     <>
+      {!!showInstruction && (
+        <ReminderComponent onClose={() => setShowInstruction(false)} />
+      )}
       <MapControl
         zoom={zoom}
         onZoomChange={(delta) => {
@@ -111,6 +119,7 @@ export function Map() {
           updateUrl({ hash: '' });
           setCurrentMap(map);
         }}
+        onShowInstruction={() => setShowInstruction(true)}
       />
       {loadedMap !== currentMap.file && (
         <div className="w-full h-full select-none">

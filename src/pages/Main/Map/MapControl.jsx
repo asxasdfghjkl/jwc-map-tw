@@ -11,12 +11,20 @@ export function MapControl({
   onZoomChange,
   currentMap,
   onCurrentMapChange,
+  onShowInstruction,
 }) {
   const { isMobile } = useDisplayMode();
   const { maps } = useData();
 
   return (
     <nav id="map-control">
+      <Button
+        variant="contained"
+        className=" shadow-md shadow-gray-300 bg-gray-100 active:bg-blue-800 active:text-white text-blue-900 border-2 border-blue-700"
+        onClick={onShowInstruction}
+      >
+        指引
+      </Button>
       {isMobile && (
         <TextField
           value={currentMap?.name ?? ''}
@@ -36,13 +44,25 @@ export function MapControl({
         </TextField>
       )}
 
-      <ButtonGroup variant="contained" aria-label="Zoom control Buttons" className={`shadow-none ${isMobile ? "": "ml-8"}` }>
-        <Button className="w-10 h-10 rounded-l-full shadow-md shadow-gray-300 bg-gray-100 active:bg-blue-800 active:text-white text-blue-900 border-2 border-blue-700" disabled={zoom === ZOOM_MIN} onClick={() => onZoomChange?.(-1)}>
-          <RemoveIcon/>
+      <ButtonGroup
+        variant="contained"
+        aria-label="Zoom control Buttons"
+        className={`shadow-none ${isMobile ? '' : 'ml-8'}`}
+      >
+        <Button
+          className="w-10 h-10 rounded-l-full shadow-md shadow-gray-300 bg-gray-100 active:bg-blue-800 active:text-white text-blue-900 border-2 border-blue-700"
+          disabled={zoom === ZOOM_MIN}
+          onClick={() => onZoomChange?.(-1)}
+        >
+          <RemoveIcon />
         </Button>
         {/* <Button onClick={() => onZoomChange?.(0)}>{zoom}%</Button> */}
-        <Button className="w-10 h-10 rounded-r-full shadow-md shadow-gray-300 bg-gray-100 active:bg-blue-800 active:text-white text-blue-900 border-2 border-blue-700" disabled={zoom === ZOOM_MAX} onClick={() => onZoomChange?.(1)}>
-          <AddIcon/>
+        <Button
+          className="w-10 h-10 rounded-r-full shadow-md shadow-gray-300 bg-gray-100 active:bg-blue-800 active:text-white text-blue-900 border-2 border-blue-700"
+          disabled={zoom === ZOOM_MAX}
+          onClick={() => onZoomChange?.(1)}
+        >
+          <AddIcon />
         </Button>
       </ButtonGroup>
       {!isMobile && (
@@ -52,7 +72,11 @@ export function MapControl({
               key={m.name}
               label={m.name}
               data-map={m.name}
-              className={`select-none shadow-md shadow-gray-400 text-lg p-2 border-2 ${m === currentMap ? "bg-blue-900 text-white border-teal-800" : "bg-gray-100 text-black border-blue-700"}`}
+              className={`select-none shadow-md shadow-gray-400 text-lg p-2 border-2 ${
+                m === currentMap
+                  ? 'bg-blue-900 text-white border-teal-800'
+                  : 'bg-gray-100 text-black border-blue-700'
+              }`}
               onClick={() => onCurrentMapChange?.(m)}
             />
           ))}
