@@ -8,7 +8,7 @@ import { useQueryParam } from '@/utils/useQueryParam';
 import React from 'react';
 import Spot from '../Spot';
 import clsx from 'clsx';
-import ReminderComponent from '@/pages/Reminder';
+import InstructionDialog from '@/pages/Instruction';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
@@ -106,7 +106,7 @@ export function Map() {
   return (
     <>
       {!!showInstruction && (
-        <ReminderComponent onClose={() => setShowInstruction(false)} />
+        <InstructionDialog onClose={() => setShowInstruction(false)} />
       )}
       <MapControl
         zoom={zoom}
