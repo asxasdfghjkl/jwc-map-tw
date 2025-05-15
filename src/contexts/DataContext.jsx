@@ -133,10 +133,23 @@ export function DataProvider({ children }) {
     });
 
     const phoneBook = makeDictionary(data.brothers, 'id', 'phone');
+    const config = makeDictionary(data.config, 'Key', 'Value');
+
+    data.spots.push({
+      id: config['機動人員ID'],
+      name: config['機動人員位置名稱'],
+      description: config['機動人員指引'],
+      map: config['機動人員地圖'],
+      x: parseInt(config['機動人員X'], 10),
+      y: parseInt(config['機動人員Y'], 10),
+      overseer: config['機動人員組長'],
+      time: config['機動人員時段'],
+      type: 'supporters',
+    });
 
     const options = [
       ...data.brothers.map((b) => ({
-        value: b.name,
+        value: b.id,
         label: b.id,
         type: 'brother',
       })),
@@ -147,25 +160,10 @@ export function DataProvider({ children }) {
       })),
     ];
 
-    const config = makeDictionary(data.config, 'Key', 'Value');
-
     return {
       loading,
       /** @type {SpotData[]} */
-      spots: [
-        ...data.spots,
-        {
-          id: config['機動人員ID'],
-          name: config['機動人員位置名稱'],
-          description: config['機動人員指引'],
-          map: config['機動人員地圖'],
-          x: parseInt(config['機動人員X'], 10),
-          y: parseInt(config['機動人員Y'], 10),
-          overseer: config['機動人員組長'],
-          time: config['機動人員時段'],
-          type: 'supporters',
-        },
-      ],
+      spots: data.spots,
       brothers: data.brothers,
       maps: data.maps,
       config,

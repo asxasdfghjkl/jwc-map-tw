@@ -68,7 +68,9 @@ export default function SpotInfoDialog() {
           <Typography variant="h6" className="mt-3">
             班表
           </Typography>
-          <ShiftTable spot={spot} />
+          <div className="-mx-3 -mt-3">
+            <ShiftTable spot={spot} />
+          </div>
         </>
       )}
     </InfoPanel>
@@ -82,67 +84,51 @@ function ShiftTable({ spot }) {
       <TableHead>
         <TableRow>
           <TableCell
-            sx={{ width: '50px' }}
-            className="px-0 py-4 align-top"
+            className="px-0 py-4 align-top w-[50px]"
             component="th"
           ></TableCell>
           <TableCell
             component="th"
-            className="px-4 pb-2 whitespace-pre-wrap align-top"
+            className="px-4 pb-2 align-top whitespace-pre-wrap w-[150px]"
           >
-            {times[spot.time].am}
+            {times[spot.time].am?.replace(/~\s+/g, '~\n')}
           </TableCell>
-          <TableCell component="th" className="px-4 pb-2  align-top">
-            {times[spot.time].pm}
+          <TableCell
+            component="th"
+            className="px-4 pb-2 align-top whitespace-pre-wrap w-[150px]"
+          >
+            {times[spot.time].pm?.replace(/~\s+/g, '~\n')}
           </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        <TableRow>
-          <TableCell
-            sx={{ width: '50px' }}
-            className="px-0 py-4 align-top"
-            component="th"
-          >
-            {LABELS[5]}
-          </TableCell>
-          <ShiftCell name={spot.am5} />
-          <ShiftCell name={spot.pm5} />
-        </TableRow>
-        <TableRow>
-          <TableCell
-            sx={{ width: '50px' }}
-            className="px-0 py-4 align-top"
-            component="th"
-          >
-            {LABELS[6]}
-          </TableCell>
-          <ShiftCell name={spot.am6} />
-          <ShiftCell name={spot.pm6} />
-        </TableRow>
-        <TableRow>
-          <TableCell
-            sx={{ width: '50px' }}
-            className="px-0 py-4 align-top"
-            component="th"
-          >
-            {LABELS[7]}
-          </TableCell>
-          <ShiftCell name={spot.am7} />
-          <ShiftCell name={spot.pm7} />
-        </TableRow>
+        {[5, 6, 7].map((day) => (
+          <TableRow key={day}>
+            <TableCell className="px-0 py-4 align-top" component="th">
+              {LABELS[day]}
+            </TableCell>
+            <ShiftCell brother={spot[`am${day}`]} />
+            <ShiftCell brother={spot[`pm${day}`]} />
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
 }
 
-function ShiftCell({ name }) {
+function ShiftCell({ brother }) {
   const { getPhone } = useData();
+
+  const [serial, name] = brother.split('-');
+  const phone = getPhone(brother);
   return (
-    <TableCell className="px-4 py-2 align-top">
-      <p className="text-xl">{name}</p>
-      <a className="text-base" href={`tel:${getPhone(name)}`}>
-        {getPhone(name)}
+    <TableCell className="px-2 py-2 align-top">
+      <p className="text-xl">
+        <small>{serial}-</small>
+        {name}
+      </p>
+      <a className="text-base" href={`tel:${phone}`}>
+        {phone}
       </a>
     </TableCell>
   );

@@ -24,7 +24,7 @@ export function BrotherInfoDialog({}) {
     if (!b) return null;
     if (brothers.length === 0) return null;
 
-    return brothers.find((bro) => bro.name === b);
+    return brothers.find((bro) => bro.id === b);
   }, [b, brothers]);
 
   const shiftList = React.useMemo(() => {
