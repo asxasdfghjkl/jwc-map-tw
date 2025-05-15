@@ -18,7 +18,7 @@ import React from 'react';
 
 export function BrotherInfoDialog({}) {
   const { b } = useQueryParam();
-  const { brothers, spots, times } = useData();
+  const { brothers, spots, times, supporters, config } = useData();
 
   const brother = React.useMemo(() => {
     if (!b) return null;
@@ -40,8 +40,9 @@ export function BrotherInfoDialog({}) {
 
     [5, 6, 7].forEach((day) => {
       ['am', 'pm'].forEach((time) => {
+        const prop = `${time}${day}`;
         for (const s of assignedSpots) {
-          if (s[`${time}${day}`] === brother.id) {
+          if (s[prop] === brother.id) {
             results.push({
               date: LABELS[day],
               time: times[s.time][time],
@@ -49,6 +50,15 @@ export function BrotherInfoDialog({}) {
               spotName: s.name ?? '(此地點不存在，請與監督聯絡)',
             });
           }
+        }
+        if (supporters[prop].includes(brother.id)) {
+          const s = spots.find((s) => s.id === config['機動人員ID']);
+          results.push({
+            date: LABELS[day],
+            time: times[s.time][time],
+            spotId: s.id,
+            spotName: s.name ?? '(此地點不存在，請與監督聯絡)',
+          });
         }
       });
     });
@@ -78,7 +88,6 @@ export function BrotherInfoDialog({}) {
       desktopHeader={b}
       key={b}
     >
-      {/* <DialogTitle className="pb-0 text-3xl">{brother.name}</DialogTitle> */}
       <Divider className="my-2" />
       {!brother && (
         <DialogContentText>沒有弟兄的資料，請與聯絡監督聯絡</DialogContentText>

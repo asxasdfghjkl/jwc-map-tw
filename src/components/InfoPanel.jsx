@@ -48,7 +48,7 @@ export function InfoPanel({
           {desktopHeader && (
             <DialogTitle className="mt-2 text-3xl">{desktopHeader}</DialogTitle>
           )}
-          {children}
+          <div className="px-5">{children}</div>
         </Paper>
       </div>
     </Portal>

@@ -32,7 +32,7 @@ export function TabView({ tabs, headerElevation = 3 }) {
           ))}
         </Tabs>
       </AppBar>
-      <div className="mt-3 p-3">
+      <div>
         {tabs.map((t) => (
           <div
             key={t.name}

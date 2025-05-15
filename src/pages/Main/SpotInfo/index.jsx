@@ -2,6 +2,8 @@ import { InfoPanel } from '@/components/InfoPanel';
 import { TabView } from '@/components/TabView';
 import { useData } from '@/contexts/DataContext';
 import { useDisplayMode } from '@/contexts/DisplayModeContext';
+import SpotInstruction from '@/pages/Main/SpotInfo/SpotInstruction';
+import SupporterSpot from '@/pages/Main/SpotInfo/SupporterSpot';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
@@ -14,6 +16,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import React from 'react';
 
@@ -29,82 +32,8 @@ export default function SpotInfoDialog() {
 
   if (!spot) return null;
 
-  if (isMobile) {
-    return (
-      <InfoPanel
-        open={spot}
-        onClose={() => {
-          updateUrl({ s: null }, true);
-        }}
-        desktopHeader={spot.name}
-        mobileSummary={spot.id + ' ' + spot.name}
-      >
-        <TabView
-          headerElevation={0}
-          tabs={[
-            {
-              name: 'instruction',
-              label: '指引',
-              render: (
-                <>
-                  <DialogContentText className="whitespace-pre-line text-lg">
-                    組長: {spot.overseer}
-                    <br />
-                    <a
-                      className="text-base"
-                      href={`tel:${getPhone(spot.overseer)}`}
-                    >
-                      {getPhone(spot.overseer)}
-                    </a>
-                  </DialogContentText>
-                  <hr className="mb-3" />
-                  <DialogContentText className="whitespace-pre-line">
-                    {spot.description || '目前暫無指引，請與監督聯絡'}
-                  </DialogContentText>
-                </>
-              ),
-            },
-            {
-              name: 'shifts',
-              label: '班表',
-              render: (
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell component="th"></TableCell>
-                      <TableCell component="th">
-                        {times[spot.time].am}
-                      </TableCell>
-                      <TableCell component="th">
-                        {times[spot.time].pm}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell component="th">{LABELS[5]}</TableCell>
-                      <ShiftCell name={spot.am5} />
-                      <ShiftCell name={spot.pm5} />
-                    </TableRow>
-                    <TableRow>
-                      <TableCell component="th">{LABELS[6]}</TableCell>
-                      <ShiftCell name={spot.am6} />
-                      <ShiftCell name={spot.pm6} />
-                    </TableRow>
-                    <TableRow>
-                      <TableCell component="th">{LABELS[7]}</TableCell>
-                      <ShiftCell name={spot.am7} />
-                      <ShiftCell name={spot.pm7} />
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              ),
-            },
-          ]}
-        />
-      </InfoPanel>
-    );
-  }
+  if (spot.type === 'supporters') return <SupporterSpot spot={spot} />;
+
   return (
     <InfoPanel
       open={spot}
@@ -115,84 +44,95 @@ export default function SpotInfoDialog() {
       mobileSummary={spot.id + ' ' + spot.name}
       key={spot.id}
     >
-      <Divider className="my-2" />
-      <div className="pb-4">
-        <DialogTitle>組長</DialogTitle>
-        <DialogContentText className="whitespace-pre-line px-6 text-gray-800 text-lg">
-          {spot.overseer}
-          <br />
-          <a className="text-base" href={`tel:${getPhone(spot.overseer)}`}>
-            {getPhone(spot.overseer)}
-          </a>
-        </DialogContentText>
-        <DialogTitle>指引</DialogTitle>
-        <DialogContentText className="whitespace-pre-line px-6 text-gray-800 text-lg">
-          {spot.description || '目前暫無指引，請與監督聯絡'}
-        </DialogContentText>
-      </div>
-      <Divider className="my-2" />
-      <div>
-        <DialogTitle className="pb-0">班表</DialogTitle>
-        <Table className="w-[calc(100%-2rem)] ml-4 text-center">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                sx={{ width: '50px' }}
-                className="px-0 py-4 align-top"
-                component="th"
-              ></TableCell>
-              <TableCell
-                component="th"
-                className="px-4 pb-2 text-base align-top"
-              >
-                {times[spot.time].am}
-              </TableCell>
-              <TableCell
-                component="th"
-                className="px-4 pb-2 text-base align-top"
-              >
-                {times[spot.time].pm}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell
-                sx={{ width: '50px' }}
-                className="px-0 py-4 align-top"
-                component="th"
-              >
-                {LABELS[5]}
-              </TableCell>
-              <ShiftCell name={spot.am5} />
-              <ShiftCell name={spot.pm5} />
-            </TableRow>
-            <TableRow>
-              <TableCell
-                sx={{ width: '50px' }}
-                className="px-0 py-4 align-top"
-                component="th"
-              >
-                {LABELS[6]}
-              </TableCell>
-              <ShiftCell name={spot.am6} />
-              <ShiftCell name={spot.pm6} />
-            </TableRow>
-            <TableRow>
-              <TableCell
-                sx={{ width: '50px' }}
-                className="px-0 py-4 align-top"
-                component="th"
-              >
-                {LABELS[7]}
-              </TableCell>
-              <ShiftCell name={spot.am7} />
-              <ShiftCell name={spot.pm7} />
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+      {isMobile ? (
+        <TabView
+          headerElevation={0}
+          tabs={[
+            {
+              name: 'instruction',
+              label: '指引',
+              render: <SpotInstruction spot={spot} />,
+            },
+            {
+              name: 'shifts',
+              label: '班表',
+              render: <ShiftTable spot={spot} />,
+            },
+          ]}
+        />
+      ) : (
+        <>
+          <Divider className="my-2" />
+          <SpotInstruction spot={spot} />
+          <Divider className="my-2" />
+          <Typography variant="h6" className="mt-3">
+            班表
+          </Typography>
+          <ShiftTable spot={spot} />
+        </>
+      )}
     </InfoPanel>
+  );
+}
+
+function ShiftTable({ spot }) {
+  const { times } = useData();
+  return (
+    <Table className="text-center">
+      <TableHead>
+        <TableRow>
+          <TableCell
+            sx={{ width: '50px' }}
+            className="px-0 py-4 align-top"
+            component="th"
+          ></TableCell>
+          <TableCell
+            component="th"
+            className="px-4 pb-2 whitespace-pre-wrap align-top"
+          >
+            {times[spot.time].am}
+          </TableCell>
+          <TableCell component="th" className="px-4 pb-2  align-top">
+            {times[spot.time].pm}
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell
+            sx={{ width: '50px' }}
+            className="px-0 py-4 align-top"
+            component="th"
+          >
+            {LABELS[5]}
+          </TableCell>
+          <ShiftCell name={spot.am5} />
+          <ShiftCell name={spot.pm5} />
+        </TableRow>
+        <TableRow>
+          <TableCell
+            sx={{ width: '50px' }}
+            className="px-0 py-4 align-top"
+            component="th"
+          >
+            {LABELS[6]}
+          </TableCell>
+          <ShiftCell name={spot.am6} />
+          <ShiftCell name={spot.pm6} />
+        </TableRow>
+        <TableRow>
+          <TableCell
+            sx={{ width: '50px' }}
+            className="px-0 py-4 align-top"
+            component="th"
+          >
+            {LABELS[7]}
+          </TableCell>
+          <ShiftCell name={spot.am7} />
+          <ShiftCell name={spot.pm7} />
+        </TableRow>
+      </TableBody>
+    </Table>
   );
 }
 
