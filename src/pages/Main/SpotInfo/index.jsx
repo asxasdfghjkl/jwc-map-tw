@@ -8,8 +8,6 @@ import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
 import {
-  DialogContentText,
-  DialogTitle,
   Divider,
   Table,
   TableBody,
@@ -21,7 +19,7 @@ import {
 import React from 'react';
 
 export default function SpotInfoDialog() {
-  const { spots, times, getPhone } = useData();
+  const { spots } = useData();
   const { s } = useQueryParam();
   const { isMobile } = useDisplayMode();
   const spot = React.useMemo(() => {
@@ -119,12 +117,12 @@ function ShiftTable({ spot }) {
 function ShiftCell({ brother }) {
   const { getPhone } = useData();
 
-  const [serial, name] = brother.split('-');
-  const phone = getPhone(brother);
+  const [serial, name] = brother?.split('-') ?? [];
+  const phone = brother ? getPhone(brother) : '';
   return (
     <TableCell className="px-2 py-2 align-top">
       <p className="text-xl">
-        <small>{serial}-</small>
+        {!!brother && <small>{serial}-</small>}
         {name}
       </p>
       <a className="text-base" href={`tel:${phone}`}>
