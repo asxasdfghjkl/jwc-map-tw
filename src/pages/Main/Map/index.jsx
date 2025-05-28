@@ -13,13 +13,14 @@ import InstructionDialog from '@/pages/Instruction';
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 25;
 const ZOOM_MAX = 400;
+const ZOOM_DEFAULT = ZOOM_MIN;
 
 function between(min, value, max) {
   return Math.max(Math.min(value, max), min);
 }
 
 export function Map() {
-  const [zoom, setZoom] = React.useState(100);
+  const [zoom, setZoom] = React.useState(ZOOM_DEFAULT);
   const scale = zoom / 100;
 
   const { spots, maps } = useData();
@@ -111,7 +112,7 @@ export function Map() {
       <MapControl
         zoom={zoom}
         onZoomChange={(delta) => {
-          if (delta === 0) return setZoom(100);
+          if (delta === 0) return setZoom(ZOOM_DEFAULT);
           setZoom((z) => between(ZOOM_MIN, z + delta * ZOOM_STEP, ZOOM_MAX));
         }}
         currentMap={currentMap}
