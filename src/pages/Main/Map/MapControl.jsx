@@ -12,6 +12,7 @@ export function MapControl({
   currentMap,
   onCurrentMapChange,
   onShowInstruction,
+  onShowQA,
 }) {
   const { isMobile } = useDisplayMode();
   const { maps } = useData();
@@ -24,6 +25,13 @@ export function MapControl({
         onClick={onShowInstruction}
       >
         指引
+      </Button>
+      <Button
+        variant="contained"
+        className=" shadow-md shadow-gray-300 bg-gray-100 active:bg-blue-800 active:text-white text-blue-900 border-2 border-blue-700"
+        onClick={onShowQA}
+      >
+        Q&amp;A
       </Button>
       {isMobile && (
         <TextField

@@ -1,4 +1,3 @@
-import { useData } from '@/contexts/DataContext';
 import {
   Button,
   Dialog,
@@ -28,23 +27,18 @@ const Instruction = ({ children }) => {
   }
 };
 
-const InstructionDialog = ({ onClose }) => {
-  const { config } = useData();
-  const onConfirm = () => {
-    localStorage.setItem('instruction', true);
-    onClose();
-  };
+const InstructionDialog = ({ onClose, header, content, closeBtn = '關閉' }) => {
   return (
     <Dialog open fullWidth maxWidth="md">
-      <DialogTitle>注意事項</DialogTitle>
+      <DialogTitle>{header}</DialogTitle>
       <DialogContent className="flex flex-col whitespace-pre-wrap">
-        {config['指引'].split('\n').map((line) => (
+        {content.split('\n').map((line) => (
           <Instruction key={line}>{line}</Instruction>
         ))}
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={onConfirm}>
-          我已經閱讀完上述指引，並且願意按照指引完成服務
+        <Button variant="contained" onClick={onClose}>
+          {closeBtn}
         </Button>
       </DialogActions>
     </Dialog>

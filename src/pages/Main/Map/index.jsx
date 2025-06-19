@@ -23,7 +23,7 @@ export function Map() {
   const [zoom, setZoom] = React.useState(ZOOM_DEFAULT);
   const scale = zoom / 100;
 
-  const { spots, maps } = useData();
+  const { spots, maps, config } = useData();
   const [currentMap, setCurrentMap] = React.useState(maps[0]);
 
   const spotsInCurrentMap = React.useMemo(() => {
@@ -103,11 +103,26 @@ export function Map() {
   const [showInstruction, setShowInstruction] = React.useState(
     !localStorage.instruction
   );
-
+  const [showQA, setShowQA] = React.useState(false);
   return (
     <>
       {!!showInstruction && (
-        <InstructionDialog onClose={() => setShowInstruction(false)} />
+        <InstructionDialog
+          header="注意事項"
+          closeBtn="我已經閱讀完上述指引，並且願意按照指引完成服務"
+          content={config['指引']}
+          onClose={() => {
+            localStorage.setItem('instruction', true);
+            setShowInstruction(false);
+          }}
+        />
+      )}
+      {!!showQA && (
+        <InstructionDialog
+          header="Q&A"
+          content={config['QA']}
+          onClose={() => setShowQA(false)}
+        />
       )}
       <MapControl
         zoom={zoom}
@@ -121,6 +136,7 @@ export function Map() {
           setCurrentMap(map);
         }}
         onShowInstruction={() => setShowInstruction(true)}
+        onShowQA={() => setShowQA(true)}
       />
       {loadedMap !== currentMap.file && (
         <div className="w-full h-full select-none">

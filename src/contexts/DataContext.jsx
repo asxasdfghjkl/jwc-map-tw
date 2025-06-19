@@ -5,7 +5,6 @@ import React from 'react';
 import useGoogleSheets from 'use-google-sheets';
 
 /** @typedef {object} SiteData
- * @prop {boolean} loading
  * @prop {SpotData[]} spots
  * @prop {BrotherData[]} brothers
  * @prop {MapData[]} maps
@@ -72,68 +71,24 @@ import useGoogleSheets from 'use-google-sheets';
 const context = React.createContext();
 
 export function DataProvider({ children }) {
-  const SHEETS = [
-    {
-      prop: 'spots',
-      id: `地點`,
-      headerRowIndex: 1,
-      setup: (rows) =>
-        rows.filter((spot) => spot.id && spot.map && (spot.x || spot.y)),
-    },
-    {
-      prop: 'brothers',
-      id: '招待員',
-      headerRowIndex: 1,
-      setup(rows) {
-        return rows.filter((brother) => brother.name);
-      },
-    },
-    { prop: 'maps', id: '地圖' },
-    { prop: 'times', id: '時段', headerRowIndex: 1 },
-    {
-      prop: 'supporters',
-      id: '機動人員',
-      headerRowIndex: 1,
-      setup(rows) {
-        /**@type {SupporterListData} */
-        const lists = {};
-        for (const time of ['am', 'pm']) {
-          for (const day of [5, 6, 7]) {
-            const prop = `${time}${day}`;
-            lists[prop] = rows
-              .map((row) => row[prop])
-              .filter((v) => v)
-              .sort((a, b) => String(a).localeCompare(b));
-          }
-        }
-        return lists;
-      },
-    },
-    { prop: 'config', id: '特殊資料', headerRowIndex: 0 },
-  ];
-  const { data: sheetResult, loading } = useGoogleSheets({
-    apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-    sheetId: import.meta.env.VITE_GOOGLE_SHEET_ID,
-    sheetsOptions: SHEETS.map((s) => ({
-      id: s.id,
-      headerRowIndex: s.headerRowIndex,
-    })),
-  });
+  const [_data, setData] = React.useState();
+
+  const dataLoadRef = React.useRef(false);
+  if (!dataLoadRef.current) {
+    dataLoadRef.current = true;
+    fetch(import.meta.env.VITE_DATA_JSON)
+      .then((res) => res.json())
+      .then((payload) => setData(payload));
+  }
 
   /**@type {SiteData} */
   const parsedData = React.useMemo(() => {
-    if (loading) return null;
+    if (!_data) return null;
 
-    const data = {};
-    SHEETS.forEach((sheet, index) => {
-      data[sheet.prop] = sheetResult?.[index]?.data ?? [];
-      if (sheet.setup) {
-        data[sheet.prop] = sheet.setup(data[sheet.prop]);
-      }
-    });
+    const data = { ..._data };
 
     const phoneBook = makeDictionary(data.brothers, 'id', 'phone');
-    const config = makeDictionary(data.config, 'Key', 'Value');
+    const config = data.config;
 
     data.spots.push({
       id: config['機動人員ID'],
@@ -161,7 +116,6 @@ export function DataProvider({ children }) {
     ];
 
     return {
-      loading,
       /** @type {SpotData[]} */
       spots: data.spots,
       brothers: data.brothers,
@@ -183,9 +137,9 @@ export function DataProvider({ children }) {
       ),
       supporters: data.supporters,
     };
-  }, [sheetResult, loading]);
+  }, [_data]);
+
   if (!parsedData) return <LoadingView fullScreen />;
-  console.log(parsedData.supporters);
   return (
     <context.Provider value={parsedData}>
       <GlobalStyles styles={parsedData.colors} />
