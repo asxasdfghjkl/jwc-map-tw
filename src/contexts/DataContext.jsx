@@ -85,7 +85,7 @@ export function DataProvider({ children }) {
   const parsedData = React.useMemo(() => {
     if (!_data) return null;
 
-    const data = { ..._data };
+    const data = { ..._data, spots: [..._data.spots] };
 
     const phoneBook = makeDictionary(data.brothers, 'id', 'phone');
     const config = data.config;

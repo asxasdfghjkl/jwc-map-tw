@@ -9,10 +9,8 @@ import React from 'react';
 import Spot from '../Spot';
 import clsx from 'clsx';
 import InstructionDialog from '@/pages/Instruction';
+import { ZOOM_MAX, ZOOM_MIN, ZOOM_STEP } from '@/VALUES';
 
-const ZOOM_STEP = 25;
-const ZOOM_MIN = 25;
-const ZOOM_MAX = 400;
 const ZOOM_DEFAULT = ZOOM_MIN;
 
 function between(min, value, max) {
