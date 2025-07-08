@@ -1,8 +1,9 @@
 import { LoadingView } from '@/components/LoadingView';
+import { AuthDialog } from '@/pages/AuthDialog';
 import { makeDictionary } from '@/utils/makeDictionary';
 import { GlobalStyles } from '@mui/material';
+import { AES, enc } from 'crypto-js';
 import React from 'react';
-import useGoogleSheets from 'use-google-sheets';
 
 /** @typedef {object} SiteData
  * @prop {SpotData[]} spots
@@ -71,21 +72,36 @@ import useGoogleSheets from 'use-google-sheets';
 const context = React.createContext();
 
 export function DataProvider({ children }) {
-  const [_data, setData] = React.useState();
+  const [password, setPassword] = React.useState(localStorage.password || '');
+  const [undecryptedData, setUndecryptedData] = React.useState();
+  const [unparsedData, setUnparsedData] = React.useState();
 
   const dataLoadRef = React.useRef(false);
   if (!dataLoadRef.current) {
     dataLoadRef.current = true;
     fetch(import.meta.env.VITE_DATA_JSON)
-      .then((res) => res.json())
-      .then((payload) => setData(payload));
+      .then((res) => res.text())
+      .then((payload) => setUndecryptedData(payload));
   }
+
+  React.useEffect(() => {
+    if (!password || !undecryptedData) {
+      setUnparsedData(undefined);
+      return;
+    }
+    const data = AES.decrypt(undecryptedData, password).toString(enc.Utf8);
+    if (data.startsWith('{')) {
+      setUnparsedData(JSON.parse(data));
+    } else {
+      setPassword('');
+    }
+  }, [password, undecryptedData]);
 
   /**@type {SiteData} */
   const parsedData = React.useMemo(() => {
-    if (!_data) return null;
+    if (!unparsedData) return null;
 
-    const data = { ..._data, spots: [..._data.spots] };
+    const data = { ...unparsedData, spots: [...unparsedData.spots] };
 
     const phoneBook = makeDictionary(data.brothers, 'id', 'phone');
     const config = data.config;
@@ -137,8 +153,9 @@ export function DataProvider({ children }) {
       ),
       supporters: data.supporters,
     };
-  }, [_data]);
+  }, [unparsedData]);
 
+  if (!password) return <AuthDialog onChange={setPassword} />;
   if (!parsedData) return <LoadingView fullScreen />;
   return (
     <context.Provider value={parsedData}>
