@@ -89,10 +89,14 @@ export function DataProvider({ children }) {
       setUnparsedData(undefined);
       return;
     }
-    const data = AES.decrypt(undecryptedData, password).toString(enc.Utf8);
-    if (data.startsWith('{')) {
-      setUnparsedData(JSON.parse(data));
-    } else {
+    try {
+      const data = AES.decrypt(undecryptedData, password).toString(enc.Utf8);
+      if (data.startsWith('{')) {
+        setUnparsedData(JSON.parse(data));
+      } else {
+        setPassword('');
+      }
+    } catch {
       setPassword('');
     }
   }, [password, undecryptedData]);
