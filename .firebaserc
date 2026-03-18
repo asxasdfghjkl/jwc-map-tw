@@ -1,5 +1,15 @@
 {
   "projects": {
-    "default": "jwc-map-tw"
-  }
+    "default": "jwc-info"
+  },
+  "targets": {
+    "jwc-info": {
+      "hosting": {
+        "default": [
+          "2026-tw-atnd-map"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
