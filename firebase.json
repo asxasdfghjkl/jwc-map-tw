@@ -1,8 +1,8 @@
 {
   "hosting": {
-    "target": "default",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "site": "2026-tw-atnd-map",
     "rewrites": [
       {
         "source": "**",

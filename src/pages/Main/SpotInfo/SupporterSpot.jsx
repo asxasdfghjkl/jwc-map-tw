@@ -69,18 +69,19 @@ function ShiftInfo() {
   const { supporters, getPhone } = useData();
   const [session, setSession] = React.useState(() => {
     const today = new Date();
-    if (today.getFullYear() === 2025) {
+    if (today.getFullYear() === 2026) {
       if (today.getMonth() + 1 === 7) {
-        if (today.getDate() >= 4 && today.getDate() <= 6) {
-          const time = today.getHours() < 12 ? 'am' : 'pm';
-          const prop = `${time}${today.getDate() + 1}`;
+        if (today.getDate() >= 3 && today.getDate() <= 5) {
+          const day = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+          const time = today.getHours() < 12 ? 'Am' : 'Pm';
+          const prop = `${day[today.getDay()]}${time}`;
           if (supporters[prop]) {
             return prop;
           }
         }
       }
     }
-    return 'am5';
+    return 'friAm';
   });
   return (
     <div className="mt-2">
@@ -90,12 +91,12 @@ function ShiftInfo() {
         value={session}
         onChange={(evt) => setSession(evt.target.value)}
       >
-        <MenuItem value="am5">7/4 (五) 上午</MenuItem>
-        <MenuItem value="pm5">7/4 (五) 下午</MenuItem>
-        <MenuItem value="am6">7/5 (六) 上午</MenuItem>
-        <MenuItem value="pm6">7/5 (六) 下午</MenuItem>
-        <MenuItem value="am7">7/6 (日) 上午</MenuItem>
-        <MenuItem value="pm7">7/6 (日) 下午</MenuItem>
+        <MenuItem value="friAm">7/3 (五) 上午</MenuItem>
+        <MenuItem value="friPm">7/3 (五) 下午</MenuItem>
+        <MenuItem value="satAm">7/4 (六) 上午</MenuItem>
+        <MenuItem value="satPm">7/4 (六) 下午</MenuItem>
+        <MenuItem value="sunAm">7/5 (日) 上午</MenuItem>
+        <MenuItem value="sunPm">7/5 (日) 下午</MenuItem>
       </Select>
       <List>
         {supporters[session].map((name) => (

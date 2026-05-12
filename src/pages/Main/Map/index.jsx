@@ -65,8 +65,8 @@ export function Map() {
       }
       alert(
         `x: ${Math.floor(evt.offsetX / scale)}, y: ${Math.floor(
-          evt.offsetY / scale
-        )}`
+          evt.offsetY / scale,
+        )}`,
       );
     }
   });
@@ -99,7 +99,7 @@ export function Map() {
   });
 
   const [showInstruction, setShowInstruction] = React.useState(
-    !localStorage.instruction
+    !localStorage.instruction,
   );
   const [showQA, setShowQA] = React.useState(false);
   return (
@@ -136,7 +136,7 @@ export function Map() {
         onShowInstruction={() => setShowInstruction(true)}
         onShowQA={() => setShowQA(true)}
       />
-      {loadedMap !== currentMap.file && (
+      {loadedMap !== currentMap?.file && (
         <div className="w-full h-full select-none">
           <LoadingView className={'absolute'} />
         </div>
@@ -180,7 +180,7 @@ export function Map() {
                 `t-${spot.time}`,
                 markedSpot &&
                   markedSpot.id === spot.id &&
-                  'selected animate-bounce'
+                  'selected animate-bounce',
               )}
               onClick={() => {
                 updateUrl({

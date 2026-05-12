@@ -38,9 +38,9 @@ export function BrotherInfoDialog({}) {
       .filter((s) => s.shifts.includes(brother.id))
       .sort((a, b) => a.id.localeCompare(b.id));
 
-    [5, 6, 7].forEach((day) => {
-      ['am', 'pm'].forEach((time) => {
-        const prop = `${time}${day}`;
+    ['fri', 'sat', 'sun'].forEach((day) => {
+      ['Am', 'Pm'].forEach((time) => {
+        const prop = `${day}${time}`;
         for (const s of assignedSpots) {
           if (s[prop] === brother.id) {
             results.push({
