@@ -1,5 +1,6 @@
 import { getSearchHistory, removeSearchHistory } from '@/helpers/SearchHistory';
-import { DeleteOutline, History as HistoryIcon } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
+import HistoryIcon from '@mui/icons-material/History';
 import {
   IconButton,
   ListItem,
@@ -38,7 +39,7 @@ export function SearchHistory({ onHistoryClick }) {
               refresh(new Date());
             }}
           >
-            <DeleteOutline />
+            <DeleteIcon />
           </IconButton>
         </ListItemButton>
       ))}

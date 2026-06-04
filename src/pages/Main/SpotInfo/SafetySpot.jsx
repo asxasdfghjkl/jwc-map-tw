@@ -11,11 +11,12 @@ import {
   ListItemText,
   MenuItem,
   Select,
+  TableCell,
   Typography,
 } from '@mui/material';
 import React from 'react';
 
-export default function SupporterSpot({ spot }) {
+export default function SafetySpot({ spot }) {
   const { isMobile } = useDisplayMode();
 
   return (
@@ -39,7 +40,7 @@ export default function SupporterSpot({ spot }) {
             {
               name: 'shifts',
               label: '班表',
-              render: <ShiftInfo type={spot.type} />,
+              render: <ShiftInfo />,
             },
           ]}
         />
@@ -59,45 +60,16 @@ export default function SupporterSpot({ spot }) {
 }
 
 function ShiftInfo() {
-  const { supporters, getPhone } = useData();
-  const workerList = supporters;
-  const [session, setSession] = React.useState(() => {
-    const today = new Date();
-    if (today.getFullYear() === 2026) {
-      if (today.getMonth() + 1 === 7) {
-        if (today.getDate() >= 3 && today.getDate() <= 5) {
-          const day = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-          const time = today.getHours() < 12 ? 'Am' : 'Pm';
-          const prop = `${day[today.getDay()]}${time}`;
-          if (workerList[prop]) {
-            return prop;
-          }
-        }
-      }
-    }
-    return 'friAm';
-  });
+  const { safety } = useData();
+
   return (
     <div className="mt-2">
-      <Select
-        label="時段"
-        fullWidth
-        value={session}
-        onChange={(evt) => setSession(evt.target.value)}
-      >
-        <MenuItem value="friAm">7/3 (五) 上午</MenuItem>
-        <MenuItem value="friPm">7/3 (五) 下午</MenuItem>
-        <MenuItem value="satAm">7/4 (六) 上午</MenuItem>
-        <MenuItem value="satPm">7/4 (六) 下午</MenuItem>
-        <MenuItem value="sunAm">7/5 (日) 上午</MenuItem>
-        <MenuItem value="sunPm">7/5 (日) 下午</MenuItem>
-      </Select>
       <List>
-        {workerList[session].map((name) => (
+        {safety.map(({ name, phone }) => (
           <ListItem key={name}>
             <ListItemText
               primary={name}
-              secondary={<a href={`tel:${getPhone(name)}`}>{getPhone(name)}</a>}
+              secondary={phone && <a href={`tel:${phone}`}>{phone}</a>}
             />
           </ListItem>
         ))}

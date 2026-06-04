@@ -3,7 +3,8 @@ import { useData } from '@/contexts/DataContext';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
-import { CoPresent, Phone } from '@mui/icons-material';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
+import PhoneIcon from '@mui/icons-material/Phone';
 import {
   DialogContentText,
   DialogTitle,
@@ -33,7 +34,7 @@ export function BrotherInfoDialog({}) {
     const assignedSpots = spots
       .map((s) => ({
         ...s,
-        shifts: [s.am5, s.pm5, s.am6, s.pm6, s.am7, s.pm7],
+        shifts: [s.friAm, s.friPm, s.satAm, s.satPm, s.sunAm, s.sunPm],
       }))
       .filter((s) => s.shifts.includes(brother.id))
       .sort((a, b) => a.id.localeCompare(b.id));
@@ -100,7 +101,7 @@ export function BrotherInfoDialog({}) {
             href={'tel:' + brother.phone}
             aria-label="Phone"
           >
-            <Phone className="text-white w-[15px]" />
+            <PhoneIcon className="text-white w-[15px]" />
           </IconButton>
           <span className="ml-10 text-lg">{brother.phone}</span>
         </ListItem>
@@ -110,7 +111,7 @@ export function BrotherInfoDialog({}) {
             variant="contained"
             aria-label="CoPresent"
           >
-            <CoPresent className="text-white w-[15px]" />
+            <CoPresentIcon className="text-white w-[15px]" />
           </IconButton>
           <span className="ml-10 text-lg">{brother.cong}</span>
         </ListItem>

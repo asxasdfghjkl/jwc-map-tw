@@ -14,11 +14,12 @@ import React from 'react';
  * @prop {Record<string, TimeData} times
  * @prop {Record<string, string>} config
  * @prop {SupporterListData} supporters
+ * @prop {SafetyPerson[]} safety
  */
 
 /** @typedef {object} SpotData
  * @prop {string} id
- * @prop {'supporters' | undefined} type
+ * @prop {'supporters' | 'safety' | undefined} type
  * @prop {string} name
  * @prop {string} description
  * @prop {string} map
@@ -26,12 +27,12 @@ import React from 'react';
  * @prop {number} y
  * @prop {string} time
  * @prop {string} overseer
- * @prop {string} am5
- * @prop {string} pm5
- * @prop {string} am6
- * @prop {string} pm6
- * @prop {string} am7
- * @prop {string} pm7
+ * @prop {string} friAm
+ * @prop {string} friPm
+ * @prop {string} satAm
+ * @prop {string} satPm
+ * @prop {string} sunAm
+ * @prop {string} sunPm
  */
 
 /** @typedef {object} BrotherData
@@ -61,12 +62,17 @@ import React from 'react';
  */
 
 /** @typedef {object} SupporterListData
- * @prop {string[]} am5
- * @prop {string[]} am6
- * @prop {string[]} am7
- * @prop {string[]} pm5
- * @prop {string[]} pm6
- * @prop {string[]} pm7
+ * @prop {string[]} friAm
+ * @prop {string[]} friPm
+ * @prop {string[]} satAm
+ * @prop {string[]} satPm
+ * @prop {string[]} sunAm
+ * @prop {string[]} sunPm
+ */
+
+/** @typedef {object} SafetyPerson
+ * @prop {string} name
+ * @prop {string} phone
  */
 
 const context = React.createContext();
@@ -104,7 +110,6 @@ export function DataProvider({ children }) {
   /**@type {SiteData} */
   const parsedData = React.useMemo(() => {
     if (!unparsedData) return null;
-
     const data = { ...unparsedData, spots: [...unparsedData.spots] };
 
     const phoneBook = makeDictionary(data.brothers, 'id', 'phone');
@@ -120,6 +125,17 @@ export function DataProvider({ children }) {
       overseer: config['機動人員組長'],
       time: config['機動人員時段'],
       type: 'supporters',
+    });
+    data.spots.push({
+      id: config['安全招待員ID'],
+      name: config['安全招待員位置名稱'],
+      description: config['安全招待員指引'],
+      map: config['安全招待員地圖'],
+      x: parseInt(config['安全招待員X'], 10),
+      y: parseInt(config['安全招待員Y'], 10),
+      overseer: config['安全招待員組長'],
+      time: config['安全招待員時段'],
+      type: 'safety',
     });
 
     const options = [
@@ -153,9 +169,10 @@ export function DataProvider({ children }) {
         (time) => ({
           '--color': time.color,
           '--color-a': time.altColor,
-        })
+        }),
       ),
       supporters: data.supporters,
+      safety: data.safety,
     };
   }, [unparsedData]);
 

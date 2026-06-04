@@ -1,15 +1,13 @@
 import { useData } from '@/contexts/DataContext';
-import { useDisplayMode } from '@/contexts/DisplayModeContext';
 import { addSearchHistory } from '@/helpers/SearchHistory';
 import { SearchHistory } from '@/pages/Main/SearchBar/SearchHistory';
 import { SearchResultItem } from '@/pages/Main/SearchBar/SearchResultItem';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
-import { Clear, NavigateBefore, Search } from '@mui/icons-material';
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   ClickAwayListener,
-  Dialog,
-  DialogContent,
   IconButton,
   InputAdornment,
   List,
@@ -80,20 +78,20 @@ export function SearchBar() {
           <form autoComplete="off">
             <TextField
               fullWidth
-              className={`outline-none bg-white shadow-md shadow-gray-400 h-12 justify-center ${showFilter ? 'rounded-t-lg': 'rounded-full'}`}
+              className={`outline-none bg-white shadow-md shadow-gray-400 h-12 justify-center ${showFilter ? 'rounded-t-lg' : 'rounded-full'}`}
               size="medium"
               variant="standard"
               sx={{
-              ".MuiInputBase-root:before": {
-                borderBottom: "none !important",
-              },
-              ".MuiInput-root:after": {
-                borderBottom: "none !important",
-              },
-              "&:hover:not(.Mui-disabled):before": {
-                borderBottom: "none !important",
-              },
-            }}
+                '.MuiInputBase-root:before': {
+                  borderBottom: 'none !important',
+                },
+                '.MuiInput-root:after': {
+                  borderBottom: 'none !important',
+                },
+                '&:hover:not(.Mui-disabled):before': {
+                  borderBottom: 'none !important',
+                },
+              }}
               placeholder="請輸入姓名或是位置編號"
               value={filterInput}
               autoComplete="off"
@@ -103,9 +101,9 @@ export function SearchBar() {
                 input: {
                   'aria-autocomplete': 'none',
                   startAdornment: (
-                    <InputAdornment  position="start">
+                    <InputAdornment position="start">
                       <IconButton disabled>
-                        <Search />
+                        <SearchIcon />
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -117,7 +115,7 @@ export function SearchBar() {
                           inputRef.current?.focus();
                         }}
                       >
-                        <Clear />
+                        <ClearIcon />
                       </IconButton>
                     </InputAdornment>
                   ),

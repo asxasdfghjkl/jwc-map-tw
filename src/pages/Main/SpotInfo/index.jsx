@@ -4,6 +4,7 @@ import { useData } from '@/contexts/DataContext';
 import { useDisplayMode } from '@/contexts/DisplayModeContext';
 import SpotInstruction from '@/pages/Main/SpotInfo/SpotInstruction';
 import SupporterSpot from '@/pages/Main/SpotInfo/SupporterSpot';
+import SafetySpot from '@/pages/Main/SpotInfo/SafetySpot';
 import { updateUrl } from '@/utils/Url';
 import { useQueryParam } from '@/utils/useQueryParam';
 import { LABELS } from '@/VALUES';
@@ -31,6 +32,8 @@ export default function SpotInfoDialog() {
   if (!spot) return null;
 
   if (spot.type === 'supporters') return <SupporterSpot spot={spot} />;
+
+  if (spot.type === 'safety') return <SafetySpot spot={spot} />;
 
   return (
     <InfoPanel
@@ -100,13 +103,13 @@ function ShiftTable({ spot }) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {[5, 6, 7].map((day) => (
+        {['fri', 'sat', 'sun'].map((day) => (
           <TableRow key={day}>
             <TableCell className="px-0 py-4 align-top" component="th">
               {LABELS[day]}
             </TableCell>
-            <ShiftCell brother={spot[`am${day}`]} />
-            <ShiftCell brother={spot[`pm${day}`]} />
+            <ShiftCell brother={spot[`${day}Am`]} />
+            <ShiftCell brother={spot[`${day}Pm`]} />
           </TableRow>
         ))}
       </TableBody>

@@ -1,10 +1,9 @@
 import { useData } from '@/contexts/DataContext';
 import { useDisplayMode } from '@/contexts/DisplayModeContext';
-import { ZOOM_MAX, ZOOM_MIN, ZOOM_STEP } from '@/VALUES';
-import { Button, ButtonGroup, Chip, MenuItem, TextField } from '@mui/material';
-import RemoveIcon from '@mui/icons-material/Remove';
+import { ZOOM_MAX, ZOOM_MIN } from '@/VALUES';
 import AddIcon from '@mui/icons-material/Add';
-import React from 'react';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Button, ButtonGroup, Chip, MenuItem, TextField } from '@mui/material';
 
 export function MapControl({
   zoom,
