@@ -92,13 +92,13 @@ function ShiftTable({ spot }) {
             component="th"
             className="px-4 pb-2 align-top whitespace-pre-wrap w-[150px]"
           >
-            {times[spot.time].am?.replace(/~\s+/g, '~\n')}
+            {times[spot.time].Am?.replace(/~\s+/g, '~\n')}
           </TableCell>
           <TableCell
             component="th"
             className="px-4 pb-2 align-top whitespace-pre-wrap w-[150px]"
           >
-            {times[spot.time].pm?.replace(/~\s+/g, '~\n')}
+            {times[spot.time].Pm?.replace(/~\s+/g, '~\n')}
           </TableCell>
         </TableRow>
       </TableHead>

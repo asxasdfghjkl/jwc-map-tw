@@ -55,8 +55,8 @@ import React from 'react';
 
 /** @typedef {object} TimeData
  * @prop {string} id
- * @prop {string} am
- * @prop {string} pm
+ * @prop {string} Am
+ * @prop {string} Pm
  * @prop {string} color
  * @prop {string} altColor
  */
